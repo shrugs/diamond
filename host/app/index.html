@@ -1,36 +1,37 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>coach</title>
+<head>
+  <meta charset="utf-8">
+  <title>coach</title>
 
-        <!-- build:css styles/vendor.css -->
-        <!-- bower:css -->
-        <link rel="stylesheet" href="bower_components/material-design-lite/material.min.css">
-        <!-- endbower -->
-        <!-- endbuild -->
+  <!-- build:css styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/material-design-lite/material.min.css">
+  <!-- endbower -->
+  <!-- endbuild -->
 
-        <!-- build:css styles/main.css -->
-        <link rel="stylesheet" href="styles/main.css">
-        <!-- endbuild -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    </head>
-    <body>
-        <input type="text" id="room-name">
-        <button type="submit" id="create-room">Create Room</button>
-        <video id="video"></video>
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild -->
+</head>
+<body>
+  <input type="text" id="room-name">
+  <button type="submit" id="create-room">Create Room</button>
+  <div id="users"></div>
+  <video id="video"></video>
 
-        <!-- build:js scripts/vendor.js -->
-        <!-- bower:js -->
-        <script src="bower_components/jquery/dist/jquery.min.js"></script>
-        <script src="bower_components/webrtc-adapter/adapter.js"></script>
-        <script src="bower_components/peerjs/peer.js"></script>
-        <script src="bower_components/material-design-lite/material.min.js"></script>
-        <!-- endbower -->
-        <!-- endbuild -->
+  <!-- build:js scripts/vendor.js -->
+  <!-- bower:js -->
+  <script src="bower_components/keymaster/keymaster.js"></script>
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/webrtc-adapter/adapter.js"></script>
+  <script src="bower_components/peerjs/peer.js"></script>
+  <script src="bower_components/material-design-lite/material.min.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
 
-        <!-- build:js scripts/index.js -->
-        <script src="scripts/index.js"></script>
-        <!-- endbuild -->
-    </body>
+  <!-- build:js scripts/index.js -->
+  <script src="scripts/index.js"></script>
+  <!-- endbuild -->
+</body>
 </html>
