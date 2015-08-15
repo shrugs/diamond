@@ -47,3 +47,66 @@ html, body {
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
+
+.diamond {
+  font-family: 'Avenir-Medium';
+  font-size: 4em;
+  margin-bottom: 6px;
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+button:focus, input[type="button"]:focus {
+    outline: none;
+}
+
+.submit-button {
+  font-family: 'Avenir-Medium';
+  width: 140px;
+  height: 40px;
+  border-radius: 4px;
+  background-color: #29AFFF;
+  color: white;
+  margin-bottom: 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #1796E1;
+}
+
+textarea{
+  resize: none;
+  font-family: 'Avenir-Medium';
+  border: none;
+  overflow: auto;
+  outline: none;
+  border-radius: 4px;
+  background-color: #EEEEEE;
+  padding: 6px 8px 6px 8px;
+}
+
+#room{
+  font-family: 'Avenir-Medium';
+  border: none;
+  overflow: auto;
+  outline: none;
+  border-radius: 4px;
+  background-color: #EEEEEE;
+  padding: 0px 8px 0px 8px;
+  margin: -2px 0px 4px 0px;
+}
+
+#title{
+  font-family: 'Avenir-Medium';
+  border: none;
+  overflow: auto;
+  outline: none;
+  border-radius: 4px;
+  background-color: #EEEEEE;
+  padding: 0px 8px 0px 8px;
+  margin: -2px 0px 4px 0px;
+}

@@ -5,10 +5,12 @@ $(document).ready(function() {
 
   var peer = new Peer({key: PEER_API_KEY});
 
-  connectToHost('htp', {
-    team: 'Team Kickass',
-    title: 'My Super Duper Cool Hack'
-  });
+  $('.submit-button').on('click', function() {
+    connectToHost('htp', {
+      team: 'Team Kickass',
+      title: 'My Super Duper Cool Hack'
+    });
+  })
 
   /*
     FNs
@@ -23,7 +25,7 @@ $(document).ready(function() {
       }
 
       navigator.webkitGetUserMedia({
-        audio: false,
+        audio: true,
         video: {
             mandatory: {
                 chromeMediaSource: 'desktop',

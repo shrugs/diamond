@@ -36,13 +36,13 @@ module.exports = function (grunt) {
       },
       jsx: {
         files: ['<%= config.app %>/scripts/{,*/}*.jsx'],
-        tasks: ['babel', 'jshint'],
+        tasks: ['babel'],
         options: {
           livereload: true
         }
       },
       js: {
-        files: ['<%= config.app %>/scripts/{,*/}*.js'],
+        files: ['<%= config.app %>/scripts/main.js'],
         tasks: ['jshint'],
         options: {
           livereload: true

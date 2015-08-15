@@ -34,8 +34,15 @@ module.exports = function (grunt) {
         files: ['bower.json'],
         tasks: ['bowerInstall']
       },
+      jsx: {
+        files: ['<%= config.app %>/scripts/{,*/}*.jsx'],
+        tasks: ['babel'],
+        options: {
+          livereload: true
+        }
+      },
       js: {
-        files: ['<%= config.app %>/scripts/{,*/}*.js'],
+        files: ['<%= config.app %>/scripts/main.js'],
         tasks: ['jshint'],
         options: {
           livereload: true
@@ -322,6 +329,16 @@ module.exports = function (grunt) {
           dest: ''
         }]
       }
+    },
+    babel: {
+      options: {
+        sourceMap: true
+      },
+      dist: {
+        files: {
+          'app/scripts/index.js': 'app/scripts/index.jsx'
+        }
+      }
     }
   });
 
@@ -341,6 +358,7 @@ module.exports = function (grunt) {
     grunt.config('watch', watch);
 
     grunt.task.run([
+      'babel',
       'clean:' + platform,
       'concurrent:' + platform,
       'connect:' + platform,
@@ -349,11 +367,13 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('test', [
+    'babel',
     'connect:test',
     'mocha'
   ]);
 
   grunt.registerTask('build', [
+    'babel',
     'clean:dist',
     'chromeManifest:dist',
     'useminPrepare',
@@ -368,6 +388,7 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('default', [
+    'babel',
     'newer:jshint',
     'test',
     'build'
