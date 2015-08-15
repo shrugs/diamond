@@ -1,6 +1,25 @@
-body {
-  padding: 20px;
-  background-color: black;
+@font-face {
+    font-family: Avenir-Book;
+    src: url('fonts/Avenir-Book.ttf');
+}
+
+@font-face {
+    font-family: Avenir-Medium;
+    src: url('fonts/Avenir-Medium.ttf');
+}
+
+@font-face {
+    font-family: Avenir-Light;
+    src: url('fonts/Avenir-Light.ttf');
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  padding-top: 20px;
+  text-align: center;
+  color: #424242;
+  font-family: 'Avenir-Medium';
 }
 
 #video{
