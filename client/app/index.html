@@ -6,21 +6,35 @@
 
         <!-- build:css styles/vendor.css -->
         <!-- bower:css -->
+        <link rel="stylesheet" href="bower_components/material-design-lite/material.min.css">
         <!-- endbower -->
         <!-- endbuild -->
 
         <!-- build:css styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     </head>
     <body>
-        <h1>'Allo</h1>
+        <img id="logo" src="images/logo.png">
+        <h1>diamond</h1>
+        <!-- Textfield with Floating Label -->
+
+<form action="#">
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield-demo">
+    <input class="mdl-textfield__input" type="text" id="sample3" />
+    <label class="mdl-textfield__label" for="sample3">Text...</label>
+  </div>
+</form>
+
 
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
         <script src="bower_components/jquery/dist/jquery.min.js"></script>
         <script src="bower_components/webrtc-adapter/adapter.js"></script>
         <script src="bower_components/peerjs/peer.js"></script>
+        <script src="bower_components/material-design-lite/material.min.js"></script>
+
         <!-- endbower -->
         <!-- endbuild -->
 
