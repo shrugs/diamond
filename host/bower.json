@@ -7,7 +7,8 @@
     "peerjs": "~0.3.14",
     "jquery": "~2.1.4",
     "material-design-lite": "~1.0.2",
-    "keymaster": "~1.6.3"
+    "keymaster": "~1.6.3",
+    "react": "~0.13.3"
   },
   "devDependencies": {}
 }
