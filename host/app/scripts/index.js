@@ -1,6 +1,8 @@
 'use strict';
 var PEER_API_KEY = 'qfsyx0jzn7xbhuxr';
 
+var CALLS = {};
+
 $(document).ready(function() {
 
   $('#create-room').on('click', function() {
@@ -8,15 +10,26 @@ $(document).ready(function() {
     var peer = new Peer($('#room-name').val(), {key: PEER_API_KEY});
 
     peer.on('call', function(call) {
-      call.answer();
-      call.on('stream', function(remoteStream) {
-        // Show stream in some video/canvas element.
-        var v = $('#video').get(0);
-        v.src = window.URL.createObjectURL(remoteStream);
-        v.play();
+
+      // add to pending calls
+      CALLS[call.peer] = call;
+      call.on('close', function() {
+        // remove from pending calls
+        delete CALLS[call.peer];
       });
+
     });
   });
+
+  function answerCall(call) {
+    call.answer();
+    call.on('stream', function(remoteStream) {
+      // Show stream in some video/canvas element.
+      var v = $('#video').get(0);
+      v.src = window.URL.createObjectURL(remoteStream);
+      v.play();
+    });
+  }
 
 });
 
