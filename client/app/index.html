@@ -6,7 +6,6 @@
 
   <!-- build:css styles/vendor.css -->
   <!-- bower:css -->
-  <link rel="stylesheet" href="bower_components/material-design-lite/material.min.css">
   <!-- endbower -->
   <!-- endbuild -->
 
@@ -16,29 +15,31 @@
 </head>
 <body>
   <img id="logo" src="images/logo.png">
-  <h1>diamond</h1>
-  <!-- Textfield with Floating Label -->
+  <h1 style="font-family: 'Avenir-Medium';font-size:4em;margin-bottom: 6px;">diamond</h1>
 
-  <form action="#">
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-      <input class="mdl-textfield__input" type="text" id="title" />
-      <label class="mdl-textfield__label" for="title">Title...</label>
+  <form style="margin-bottom:20px;">
+    <div>
+      <label for="room"><h2 style="margin-bottom:6px;">Event</h2></label>
+
+      <input value="Hack the Planet" style="font-family: 'Avenir-Medium'; border: none; overflow: auto; outline: none;border-radius: 4px;background-color:#EEEEEE;padding: 0px 8px 0px 8px; margin: -2px 0px 4px 0px;" type="text" id="room" name="room">
     </div>
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-      <input class="mdl-textfield__input" type="text" id="tagline" />
-      <label class="mdl-textfield__label" for="tagline">Tagline...</label>
+    <div>
+      <label for="title"><h2 style="margin-bottom:6px;">Project Title</h2></label>
+      <input style="font-family: 'Avenir-Medium'; border: none; overflow: auto; outline: none;border-radius: 4px;background-color:#EEEEEE;padding: 0px 8px 0px 8px; margin: -2px 0px 4px 0px;" type="text" id="title" name="title">
+    </div>
+    <div>
+      <label for="tagline"><h2 style="margin-bottom:6px;">Project Tagline</h2></label>
+      <textarea rows="2" cols="18" style="resize: none;font-family: 'Avenir-Medium'; border: none; overflow: auto; outline: none;border-radius: 4px;background-color:#EEEEEE;padding: 6px 8px 6px 8px;" type="text" id="tagline" name="tagline"></textarea>
     </div>
   </form>
-
+  <button href="#" class="submit-button" type="button" style=""><h2 style="margin-top:5px;">Step up!</h2></button>
 
   <!-- build:js scripts/vendor.js -->
   <!-- bower:js -->
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/webrtc-adapter/adapter.js"></script>
   <script src="bower_components/peerjs/peer.js"></script>
-  <script src="bower_components/material-design-lite/material.min.js"></script>
   <script src="bower_components/react/react-with-addons.min.js"></script>
-
   <!-- endbower -->
   <!-- endbuild -->
 

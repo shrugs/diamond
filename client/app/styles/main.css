@@ -16,19 +16,15 @@
 html, body {
   margin: 0;
   padding: 0;
-  padding-top: 20px;
+  padding-top: 14px;
   text-align: center;
   color: #424242;
   font-family: 'Avenir-Medium';
 }
 
-h1 {
-
-}
-
 #logo {
-  height: 48px;
-  margin-bottom: -14px;
+  height: 40px;
+  margin-bottom: -30px;
 }
 
 video {
@@ -36,6 +32,15 @@ video {
   height: 100%;
 }
 
-.mdl-textfield .mdl-textfield__label:after {
-  background-color: #29AFFF;
+button:focus, input[type="button"]:focus {
+    outline: none;
+}
+
+.submit-button {
+  font-family: 'Avenir-Medium';width:140px;height:40px;border-radius:4px;background-color:#29AFFF;color:white;margin-bottom:20px;border: none;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #1796E1;
 }
