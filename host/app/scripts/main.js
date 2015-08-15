@@ -14,7 +14,7 @@ chrome.app.runtime.onInstalled.addListener(function() {
   chrome.contextMenus.create({
     title: 'TEST THING', // title
     id: 'test', // call.peer
-    documentUrlPatterns: ["*"],
+    documentUrlPatterns: ['*'],
     contexts: ['all']
   });
 });
