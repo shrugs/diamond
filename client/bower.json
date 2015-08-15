@@ -1,0 +1,11 @@
+{
+  "name": "client",
+  "version": "0.0.0",
+  "dependencies": {
+    "webrtc-adapter": "~0.2.3",
+    "bluebird": "~2.9.34",
+    "peerjs": "~0.3.14",
+    "jquery": "~2.1.4"
+  },
+  "devDependencies": {}
+}
