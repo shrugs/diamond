@@ -44,3 +44,15 @@ button:focus, input[type="button"]:focus {
 .submit-button:hover {
   background-color: #1796E1;
 }
+
+textarea{
+  resize: none;font-family: 'Avenir-Medium'; border: none; overflow: auto; outline: none;border-radius: 4px;background-color:#EEEEEE;padding: 6px 8px 6px 8px;
+}
+
+#room{
+  font-family: 'Avenir-Medium'; border: none; overflow: auto; outline: none;border-radius: 4px;background-color:#EEEEEE;padding: 0px 8px 0px 8px; margin: -2px 0px 4px 0px;
+}
+
+#title{
+  font-family: 'Avenir-Medium'; border: none; overflow: auto; outline: none;border-radius: 4px;background-color:#EEEEEE;padding: 0px 8px 0px 8px; margin: -2px 0px 4px 0px;
+}
