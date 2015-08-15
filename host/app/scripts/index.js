@@ -5,6 +5,11 @@ var CALLS = {};
 
 $(document).ready(function() {
 
+  key('command+k, ctrl+k', function() {
+    // @TODO(shrugs) - show list of friends
+    console.log('k');
+  });
+
   $('#create-room').on('click', function() {
 
     var peer = new Peer($('#room-name').val(), {key: PEER_API_KEY});
@@ -13,6 +18,9 @@ $(document).ready(function() {
 
       // add to pending calls
       CALLS[call.peer] = call;
+
+      answerCall(call);
+
       call.on('close', function() {
         // remove from pending calls
         delete CALLS[call.peer];
