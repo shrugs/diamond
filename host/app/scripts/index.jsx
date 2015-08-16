@@ -28,17 +28,17 @@ $(document).ready(function() {
             maxWidth: '34%',
             textAlign: 'center',
             flexGrow: '1',
-            position: 'relative',
-            border: '1px solid red',
-            backgroundColor: this.props.tabIndex === i ? '#E8E8E8' : 'transparent'
+            position: 'relative'
           }} key={i}>
-            <h3 style={{
-              marginTop: '5px',
-              marginBottom: '2px'
-            }}>{tab.title}</h3>
             <video src={tab.src} style={{
               width: '75%',
+              borderRadius: '5px',
+              border: this.props.tabIndex === i ? '4px solid white' : 'none'
             }}></video>
+            <h1 style={{
+              marginTop: this.props.tabIndex === i ? '0' : '4px',
+              marginBottom: '2px'
+            }}>{tab.title}</h1>
             <p style={{
               marginTop: '5px',
               marginBottom: '0'
@@ -61,12 +61,14 @@ $(document).ready(function() {
           <div style={{
             width: '100vw',
             height: '40vh',
-            backgroundColor: 'rgba(156, 156, 156, 0.4)',
+            backgroundColor: 'rgb(41, 174, 255)',
+            color: 'white',
             display: 'flex',
             flexDirection: 'row',
             flexWrap: 'nowrap',
             justifyContent: 'center',
             alignContent: 'flex-start',
+            borderRadius: '5px',
             alignItems: 'center'
           }}>
             {tabs}
@@ -103,11 +105,16 @@ $(document).ready(function() {
         activeStream: undefined,
         room: 'Hack the Planet',
         CALLS: [
-          {
-            url: 'test',
-            metadata: {title: 'My Title', tagline: 'My tagline'},
-            call: {}
-          }
+          // {
+          //   url: 'test',
+          //   metadata: {title: 'My Title', tagline: 'My tagline'},
+          //   call: {}
+          // },
+          // {
+          //   url: 'test',
+          //   metadata: {title: 'Project 2', tagline: 'My tagline'},
+          //   call: {}
+          // }
         ]
       };
     },
@@ -227,7 +234,18 @@ $(document).ready(function() {
 
         var src = this.state.CALLS[this.state.activeStream].url;
         r.push (
-          <video id="video" key="presenting" src={src} autoPlay></video>
+          <div style={{
+            backgroundColor: '#000',
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            flexWrap: 'nowrap',
+            justifyContent: 'center',
+            alignContent: 'flex-start',
+            alignItems: 'center'
+          }}>
+            <video id="video" key="presenting" src={src} autoPlay></video>
+          </div>
         );
       }
 

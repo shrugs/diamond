@@ -33,21 +33,21 @@ $(document).ready(function () {
               maxWidth: '34%',
               textAlign: 'center',
               flexGrow: '1',
-              position: 'relative',
-              border: '1px solid red',
-              backgroundColor: _this.props.tabIndex === i ? '#E8E8E8' : 'transparent'
+              position: 'relative'
             }, key: i },
+          React.createElement('video', { src: tab.src, style: {
+              width: '75%',
+              borderRadius: '5px',
+              border: _this.props.tabIndex === i ? '4px solid white' : 'none'
+            } }),
           React.createElement(
-            'h3',
+            'h1',
             { style: {
-                marginTop: '5px',
+                marginTop: _this.props.tabIndex === i ? '0' : '4px',
                 marginBottom: '2px'
               } },
             tab.title
           ),
-          React.createElement('video', { src: tab.src, style: {
-              width: '75%'
-            } }),
           React.createElement(
             'p',
             { style: {
@@ -76,12 +76,14 @@ $(document).ready(function () {
           { style: {
               width: '100vw',
               height: '40vh',
-              backgroundColor: 'rgba(156, 156, 156, 0.4)',
+              backgroundColor: 'rgb(41, 174, 255)',
+              color: 'white',
               display: 'flex',
               flexDirection: 'row',
               flexWrap: 'nowrap',
               justifyContent: 'center',
               alignContent: 'flex-start',
+              borderRadius: '5px',
               alignItems: 'center'
             } },
           tabs
@@ -118,7 +120,18 @@ $(document).ready(function () {
         tabTimer: undefined,
         activeStream: undefined,
         room: 'Hack the Planet',
-        CALLS: []
+        CALLS: [
+          // {
+          //   url: 'test',
+          //   metadata: {title: 'My Title', tagline: 'My tagline'},
+          //   call: {}
+          // },
+          // {
+          //   url: 'test',
+          //   metadata: {title: 'Project 2', tagline: 'My tagline'},
+          //   call: {}
+          // }
+        ]
       };
     },
 
@@ -263,7 +276,20 @@ $(document).ready(function () {
         }
 
         var src = this.state.CALLS[this.state.activeStream].url;
-        r.push(React.createElement('video', { id: 'video', key: 'presenting', src: src, autoPlay: true }));
+        r.push(React.createElement(
+          'div',
+          { style: {
+              backgroundColor: '#000',
+              height: '100vh',
+              display: 'flex',
+              flexDirection: 'column',
+              flexWrap: 'nowrap',
+              justifyContent: 'center',
+              alignContent: 'flex-start',
+              alignItems: 'center'
+            } },
+          React.createElement('video', { id: 'video', key: 'presenting', src: src, autoPlay: true })
+        ));
       }
 
       return React.createElement(

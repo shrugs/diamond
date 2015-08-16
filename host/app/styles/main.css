@@ -21,6 +21,12 @@ html, body {
   color: #424242;
   font-family: 'Avenir-Medium';
 }
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
 
 #video{
   width:100%;
