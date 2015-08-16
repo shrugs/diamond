@@ -22,6 +22,12 @@ html, body {
   font-family: 'Avenir-Medium';
 }
 
+.diamond {
+  font-family: 'Avenir-Medium';
+  font-size: 4em;
+  margin-bottom: 6px;
+}
+
 #logo {
   height: 40px;
   margin-bottom: -30px;

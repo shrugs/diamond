@@ -3,6 +3,35 @@ var PEER_API_KEY = 'qfsyx0jzn7xbhuxr';
 
 $(document).ready(function() {
 
+
+  var App = React.createClass({
+    render: function() {
+      return (
+        <div>
+          <img id="logo" src="images/logo.png"></img>
+          <h1 className="diamond">diamond</h1>
+
+          <form style="margin-bottom:20px;">
+            <div>
+              <label for="room"><h2 style="margin-bottom:6px;">Event</h2></label>
+
+              <input value="Hack the Planet" type="text" id="room" name="room">
+            </div>
+            <div>
+              <label for="title"><h2 style="margin-bottom:6px;">Project Title</h2></label>
+              <input type="text" id="title" name="title">
+            </div>
+            <div>
+              <label for="tagline"><h2 style="margin-bottom:6px;">Project Tagline</h2></label>
+              <textarea rows="2" cols="18" type="text" id="tagline" name="tagline"></textarea>
+            </div>
+          </form>
+          <button class="submit-button" type="button" ><h2 style="margin-top:5px;">Step up!</h2></button>
+        </div>
+      );
+    };
+  });
+
   var peer = new Peer({key: PEER_API_KEY});
 
   $('.submit-button').on('click', function() {

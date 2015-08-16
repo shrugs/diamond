@@ -8,7 +8,7 @@ var STATE = {
 }
 
 var CALLS = {};
-console.log('k');
+
 $(document).ready(function() {
 
   key('ctrl+tab', function() {
