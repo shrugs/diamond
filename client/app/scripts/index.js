@@ -14,12 +14,12 @@ $(document).ready(function () {
 
     getInitialState: function getInitialState() {
       return {
-        state: STATE.INITIAL
+        state: STATE.INITIAL,
+        room: 'Hack the Planet'
       };
     },
 
     onSubmit: function onSubmit() {
-
       this.connectToHost(this.state.room, {
         title: this.state.title,
         tagline: this.state.tagline
@@ -51,14 +51,15 @@ $(document).ready(function () {
         }, function (stream) {
           var call = peer.call(host, stream, { metadata: metadata || {} });
 
-          call.on('error', this.disconnect);
-          call.on('close', this.disconnect);
+          call.on('error', console.log.bind(console));
+          call.on('close', console.log.bind(console));
           that.setState({
             state: STATE.WAITING,
             call: call
           });
 
-          var t = setTimeout(function () {
+          var t = setInterval(function () {
+            console.log(call.open);
             if (call.open) {
               clearInterval(t);
               that.setState({
@@ -91,6 +92,15 @@ $(document).ready(function () {
       }
     },
 
+    updateState: function updateState(k) {
+      var that = this;
+      return function (e) {
+        var s = {};
+        s[k] = e.target.value;
+        that.setState(s);
+      };
+    },
+
     render: function render() {
       if (this.state.state === STATE.INITIAL) {
         return React.createElement(
@@ -117,7 +127,7 @@ $(document).ready(function () {
                   'Event'
                 )
               ),
-              React.createElement('input', { value: this.state.room, defaultValue: 'Hack the Planet', type: 'text', name: 'room' })
+              React.createElement('input', { value: this.state.room, onChange: this.updateState('room'), type: 'text', name: 'room' })
             ),
             React.createElement(
               'div',
@@ -131,7 +141,7 @@ $(document).ready(function () {
                   'Project Title'
                 )
               ),
-              React.createElement('input', { type: 'text', name: 'title', value: this.state.title })
+              React.createElement('input', { type: 'text', name: 'title', value: this.state.title, onChange: this.updateState('title') })
             ),
             React.createElement(
               'div',
@@ -145,7 +155,7 @@ $(document).ready(function () {
                   'Project Tagline'
                 )
               ),
-              React.createElement('textarea', { rows: '2', cols: '18', type: 'text', name: 'tagline', maxLength: '140', value: this.state.tagline })
+              React.createElement('textarea', { rows: '2', cols: '18', type: 'text', name: 'tagline', maxLength: '140', value: this.state.tagline, onChange: this.updateState('tagline') })
             )
           ),
           React.createElement(
@@ -176,10 +186,19 @@ $(document).ready(function () {
       } else if (this.state.state === STATE.PRESENTING) {
         return React.createElement(
           'div',
-          null,
+          { style: {
+              width: '100vw',
+              height: '100vh',
+              display: 'flex',
+              flexDirection: 'column',
+              flexWrap: 'nowrap',
+              justifyContent: 'center',
+              alignContent: 'flex-start',
+              alignItems: 'center'
+            } },
           React.createElement(
             'button',
-            { onClick: this.disconnect },
+            { className: 'submit-button', onClick: this.disconnect },
             'Disconnect'
           )
         );

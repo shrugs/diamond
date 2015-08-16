@@ -7,74 +7,198 @@ var STATE = {
   WAITING_FOR_CALL: 2
 };
 
-var CALLS = {};
+var CALLS = [];
 
 $(document).ready(function () {
 
-  key('ctrl+tab', function () {
-    // @TODO(shrugs) - show list of friends
-    console.log('k');
+  var TabSwitcher = React.createClass({
+    displayName: 'TabSwitcher',
+
+    propTypes: {
+      tabs: React.PropTypes.arrayOf(React.PropTypes.shape({
+        title: React.PropTypes.string,
+        src: React.PropTypes.string,
+        tagline: React.PropTypes.string
+      })),
+      tabIndex: React.PropTypes.number
+    },
+    render: function render() {
+      var _this = this;
+
+      var tabs = this.props.tabs.map(function (tab, i) {
+        // @TODO(shrugs) - autoPlay on this video or no?
+        return React.createElement(
+          'div',
+          { style: {
+              margin: '20px',
+              height: '30vh',
+              maxWidth: '34%',
+              textAlign: 'center',
+              flexGrow: '1',
+              position: 'relative',
+              border: '1px solid red',
+              backgroundColor: _this.props.tabIndex === i ? '#E8E8E8' : 'transparent'
+            }, key: i },
+          React.createElement(
+            'h3',
+            { style: {
+                marginTop: '5px',
+                marginBottom: '2px'
+              } },
+            tab.title
+          ),
+          React.createElement('video', { src: tab.src, style: {
+              width: '75%'
+            } }),
+          React.createElement(
+            'p',
+            { style: {
+                marginTop: '5px',
+                marginBottom: '0'
+              } },
+            tab.tagline
+          )
+        );
+      });
+      return React.createElement(
+        'div',
+        { style: {
+            position: 'absolute',
+            width: '100vw',
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            flexWrap: 'nowrap',
+            justifyContent: 'center',
+            alignContent: 'flex-start',
+            alignItems: 'center'
+          } },
+        React.createElement(
+          'div',
+          { style: {
+              width: '100vw',
+              height: '40vh',
+              backgroundColor: 'rgba(156, 156, 156, 0.4)',
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'nowrap',
+              justifyContent: 'center',
+              alignContent: 'flex-start',
+              alignItems: 'center'
+            } },
+          tabs
+        )
+      );
+    }
   });
 
   var App = React.createClass({
     displayName: 'App',
 
     getInitialState: function getInitialState() {
+      var _this2 = this;
+
+      key('ctrl+tab', function () {
+        // @TODO(shrugs) - show list of friends
+        if (_this2.state.tabTimer !== undefined) {
+          // increment the thing and reset the timer
+          clearTimeout(_this2.state.tabTimer);
+          _this2.startTabTimer();
+          _this2.setState({
+            tabIndex: (_this2.state.tabIndex + 1) % CALLS.length
+          });
+        } else {
+          _this2.startTabTimer();
+          _this2.setState({
+            tabIndex: 0
+          });
+        }
+      });
+
       return {
         state: STATE.INITIAL,
+        tabTimer: undefined,
+        activeStream: undefined,
         room: 'Hack the Planet'
       };
     },
 
-    answerCall: function answerCall(call) {
-      var _this = this;
-
-      call.answer();
-      call.on('stream', function (remoteStream) {
-        _this.setState({
-          state: STATE.PRESENTING
-        });
-        var v = $('#video').get(0);
-        v.src = window.URL.createObjectURL(remoteStream);
-        v.play();
-      });
-      call.on('close', function () {
-        // remove from pending calls
-        delete CALLS[call.peer];
+    /*
+      TAB TIMER
+    */
+    startTabTimer: function startTabTimer() {
+      this.setState({
+        tabTimer: setTimeout(this.onTabTimerEnd, 600)
       });
     },
 
-    createRoom: function createRoom(e) {
-      var _this2 = this;
-
-      console.log(this.state.room);
-      var peer = new Peer(this.state.room, { key: PEER_API_KEY });
-
-      peer.on('call', function (call) {
-
-        // add to pending calls
-        CALLS[call.peer] = call;
-        _this2.answerCall(call);
+    onTabTimerEnd: function onTabTimerEnd() {
+      clearTimeout(this.state.tabTimer);
+      this.setState({
+        tabTimer: undefined,
+        activeStream: this.state.tabIndex
       });
+    },
+
+    /*
+      ROOM HANDLING
+    */
+    createRoom: function createRoom(e) {
+      var _this3 = this;
 
       this.setState({
         state: STATE.WAITING_FOR_CALL
       });
+
+      var peer = new Peer(this.state.room, { key: PEER_API_KEY });
+
+      peer.on('call', function (call) {
+        // immediately answer call
+        call.answer();
+        call.on('stream', function (remoteStream) {
+          // store the stream url in CALLS, along with metadata
+          CALLS.push({
+            url: window.URL.createObjectURL(remoteStream),
+            metadata: call.metadata,
+            call: call
+          });
+          _this3.setState({
+            state: STATE.PRESENTING,
+            activeStream: CALLS.length === 1 ? 0 : _this3.state.activeStream
+          });
+        }, function (e) {
+          debugger;
+        });
+        call.on('close', function () {
+          console.log('CONNECTION CLOSED');
+          // remove from CALLS
+          CALLS = CALLS.filter(function (c) {
+            return c.call.peer !== call.peer;
+          });
+
+          if (!CALLS.length) {
+            this.setState({
+              state: STATE.WAITING_FOR_CALL
+            });
+          }
+        });
+      });
     },
 
-    roomChange: function roomChange(event) {
+    onRoomChange: function onRoomChange(e) {
       this.setState({
-        room: event.target.value
+        room: e.target.value
       });
     },
 
     render: function render() {
+      var r = [];
 
       if (this.state.state === STATE.INITIAL) {
 
-        return React.createElement(
+        r.push(React.createElement(
           'div',
-          null,
+          { key: 'initial' },
           React.createElement('img', { className: 'logo', src: 'images/logo.png' }),
           React.createElement(
             'h1',
@@ -96,28 +220,23 @@ $(document).ready(function () {
                   'Event'
                 )
               ),
-              React.createElement('input', {
-                type: 'text',
-                defaultValue: 'Hack the Planet',
-                onChange: this.roomChange,
-                ref: 'room',
-                name: 'room' })
+              React.createElement('input', { onChange: this.onRoomChange, value: this.state.room, defaultValue: 'Hack the Planet', type: 'text', name: 'room' })
             )
           ),
           React.createElement(
             'button',
-            { href: '#', className: 'submit-button', type: 'button', onClick: this.createRoom },
+            { className: 'submit-button', onClick: this.createRoom },
             React.createElement(
               'h2',
               { style: { marginTop: '5px' } },
               'Step up!'
             )
           )
-        );
+        ));
       } else if (this.state.state === STATE.WAITING_FOR_CALL) {
-        return React.createElement(
+        r.push(React.createElement(
           'div',
-          { style: { textAlign: 'center', fontSize: '6vw' } },
+          { key: 'waiting', style: { textAlign: 'center', fontSize: '6vw' } },
           React.createElement(
             'h3',
             null,
@@ -128,10 +247,29 @@ $(document).ready(function () {
             null,
             this.state.room
           )
-        );
+        ));
       } else if (this.state.state === STATE.PRESENTING) {
-        return React.createElement('div', null);
+
+        if (this.state.tabTimer !== undefined) {
+          var tabs = CALLS.map(function (c) {
+            return {
+              title: c.metadata.title,
+              src: c.url,
+              tagline: c.metadata.tagline
+            };
+          });
+          r.push(React.createElement(TabSwitcher, { key: 'tabSwitcher', tabIndex: this.state.tabIndex, tabs: tabs }));
+        }
+
+        var src = CALLS[this.state.activeStream].url;
+        r.push(React.createElement('video', { id: 'video', key: 'presenting', src: src, autoPlay: true }));
       }
+
+      return React.createElement(
+        'div',
+        null,
+        r
+      );
     }
 
   });

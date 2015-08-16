@@ -7,70 +7,182 @@ var STATE = {
   WAITING_FOR_CALL: 2,
 }
 
-var CALLS = {};
+var CALLS = [
+];
 
 $(document).ready(function() {
 
-  key('ctrl+tab', function() {
-    // @TODO(shrugs) - show list of friends
-    console.log('k');
+  var TabSwitcher = React.createClass({
+    propTypes: {
+      tabs: React.PropTypes.arrayOf(React.PropTypes.shape({
+        title: React.PropTypes.string,
+        src: React.PropTypes.string,
+        tagline: React.PropTypes.string
+      })),
+      tabIndex: React.PropTypes.number
+    },
+    render: function() {
+      var tabs = this.props.tabs.map((tab, i) => {
+        // @TODO(shrugs) - autoPlay on this video or no?
+        return (
+          <div style={{
+            margin: '20px',
+            height: '30vh',
+            maxWidth: '34%',
+            textAlign: 'center',
+            flexGrow: '1',
+            position: 'relative',
+            border: '1px solid red',
+            backgroundColor: this.props.tabIndex === i ? '#E8E8E8' : 'transparent'
+          }} key={i}>
+            <h3 style={{
+              marginTop: '5px',
+              marginBottom: '2px'
+            }}>{tab.title}</h3>
+            <video src={tab.src} style={{
+              width: '75%',
+            }}></video>
+            <p style={{
+              marginTop: '5px',
+              marginBottom: '0'
+            }}>{tab.tagline}</p>
+          </div>
+        );
+      });
+      return (
+        <div style={{
+          position: 'absolute',
+          width: '100vw',
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          flexWrap: 'nowrap',
+          justifyContent: 'center',
+          alignContent: 'flex-start',
+          alignItems: 'center'
+        }}>
+          <div style={{
+            width: '100vw',
+            height: '40vh',
+            backgroundColor: 'rgba(156, 156, 156, 0.4)',
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'nowrap',
+            justifyContent: 'center',
+            alignContent: 'flex-start',
+            alignItems: 'center'
+          }}>
+            {tabs}
+          </div>
+        </div>
+      );
+    }
   });
-
 
   var App = React.createClass({
 
     getInitialState: function() {
+
+      key('ctrl+tab', () => {
+        // @TODO(shrugs) - show list of friends
+        if (this.state.tabTimer !== undefined) {
+          // increment the thing and reset the timer
+          clearTimeout(this.state.tabTimer);
+          this.startTabTimer();
+          this.setState({
+            tabIndex: (this.state.tabIndex + 1) % CALLS.length
+          });
+        } else {
+          this.startTabTimer();
+          this.setState({
+            tabIndex: 0
+          });
+        }
+      });
+
       return {
         state: STATE.INITIAL,
+        tabTimer: undefined,
+        activeStream: undefined,
         room: 'Hack the Planet'
       };
     },
 
-    answerCall: function(call) {
-      call.answer();
-      call.on('stream', (remoteStream) => {
-        this.setState({
-          state: STATE.PRESENTING
-        })
-        var v = $('#video').get(0);
-        v.src = window.URL.createObjectURL(remoteStream);
-        v.play();
-      });
-      call.on('close', function() {
-        // remove from pending calls
-        delete CALLS[call.peer];
+    /*
+      TAB TIMER
+    */
+    startTabTimer: function() {
+      this.setState({
+        tabTimer: setTimeout(this.onTabTimerEnd, 600)
       });
     },
 
-    createRoom: function(e) {
-
-      console.log(this.state.room);
-      var peer = new Peer(this.state.room, {key: PEER_API_KEY});
-
-      peer.on('call', call => {
-
-        // add to pending calls
-        CALLS[call.peer] = call;
-        this.answerCall(call);
+    onTabTimerEnd: function() {
+      clearTimeout(this.state.tabTimer);
+      this.setState({
+        tabTimer: undefined,
+        activeStream: this.state.tabIndex
       });
+    },
 
+
+    /*
+      ROOM HANDLING
+    */
+    createRoom: function(e) {
       this.setState({
         state: STATE.WAITING_FOR_CALL
       });
+
+      var peer = new Peer(this.state.room, {key: PEER_API_KEY});
+
+      peer.on('call', (call) => {
+        // immediately answer call
+        call.answer();
+        call.on('stream', (remoteStream) => {
+          // store the stream url in CALLS, along with metadata
+          CALLS.push({
+            url: window.URL.createObjectURL(remoteStream),
+            metadata: call.metadata,
+            call: call
+          });
+          this.setState({
+            state: STATE.PRESENTING,
+            activeStream: CALLS.length === 1 ? 0 : this.state.activeStream
+          });
+
+        }, function(e) {
+          debugger;
+        });
+        call.on('close', function() {
+          console.log('CONNECTION CLOSED');
+          // remove from CALLS
+          CALLS = CALLS.filter((c) => {
+            return c.call.peer !== call.peer;
+          });
+
+          if (!CALLS.length) {
+            this.setState({
+              state: STATE.WAITING_FOR_CALL
+            });
+          }
+        });
+      });
     },
 
-    roomChange: function(event) {
+    onRoomChange: function(e) {
       this.setState({
-        room: event.target.value
+        room: e.target.value
       });
     },
 
     render: function() {
+      var r = [];
 
       if (this.state.state === STATE.INITIAL) {
 
-        return (
-          <div>
+        r.push (
+          <div key="initial">
             <img className="logo" src="images/logo.png"></img>
             <h1 className="diamond">diamond</h1>
 
@@ -79,34 +191,43 @@ $(document).ready(function() {
                 <label htmlFor="room">
                   <h2 style={{marginBottom: '6px'}}>Event</h2>
                 </label>
-                <input
-                  type="text"
-                  defaultValue="Hack the Planet"
-                  onChange={this.roomChange}
-                  ref="room"
-                  name="room">
-                </input>
+                <input onChange={this.onRoomChange} value={this.state.room} defaultValue="Hack the Planet" type="text" name="room"></input>
               </div>
             </form>
-            <button href="#" className="submit-button" type="button" onClick={this.createRoom}>
-              <h2 style={{marginTop: '5px'}}>
-                Step up!
-              </h2>
+            <button className="submit-button" onClick={this.createRoom}>
+              <h2 style={{marginTop: '5px'}}>Step up!</h2>
             </button>
           </div>
         );
       } else if (this.state.state === STATE.WAITING_FOR_CALL) {
-        return (
-          <div style={{textAlign: 'center', fontSize: '6vw'}}>
+        r.push (
+          <div key="waiting" style={{textAlign: 'center', fontSize: '6vw'}}>
             <h3>Join Room</h3>
             <h1>{this.state.room}</h1>
           </div>
         );
       } else if (this.state.state === STATE.PRESENTING) {
-        return (
-          <div></div>
+
+        if (this.state.tabTimer !== undefined) {
+          var tabs = CALLS.map((c) => {
+            return {
+              title: c.metadata.title,
+              src: c.url,
+              tagline: c.metadata.tagline
+            };
+          })
+          r.push(<TabSwitcher key="tabSwitcher" tabIndex={this.state.tabIndex} tabs={tabs}></TabSwitcher>);
+        }
+
+        var src = CALLS[this.state.activeStream].url;
+        r.push (
+          <video id="video" key="presenting" src={src} autoPlay></video>
         );
       }
+
+      return (
+        <div>{r}</div>
+      );
     }
 
   });

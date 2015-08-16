@@ -14,12 +14,12 @@ $(document).ready(function() {
 
     getInitialState: function() {
       return {
-        state: STATE.INITIAL
+        state: STATE.INITIAL,
+        room: 'Hack the Planet'
       }
     },
 
     onSubmit: function() {
-
       this.connectToHost(this.state.room, {
         title: this.state.title,
         tagline: this.state.tagline
@@ -51,14 +51,15 @@ $(document).ready(function() {
         }, function(stream) {
           var call = peer.call(host, stream, { metadata: metadata || {} });
 
-          call.on('error', this.disconnect);
-          call.on('close', this.disconnect);
+          call.on('error', console.log.bind(console));
+          call.on('close', console.log.bind(console));
           that.setState({
             state: STATE.WAITING,
             call: call
           });
 
-          var t = setTimeout(function() {
+          var t = setInterval(function() {
+            console.log(call.open);
             if (call.open) {
               clearInterval(t);
               that.setState({
@@ -91,6 +92,15 @@ $(document).ready(function() {
       }
     },
 
+    updateState: function(k) {
+      var that = this;
+      return function(e) {
+        var s = {}
+        s[k] = e.target.value;
+        that.setState(s);
+      };
+    },
+
     render: function() {
       if (this.state.state === STATE.INITIAL) {
         return (
@@ -101,15 +111,15 @@ $(document).ready(function() {
             <form>
               <div>
                 <label htmlFor="room"><h2>Event</h2></label>
-                <input value={this.state.room} defaultValue="Hack the Planet" type="text" name="room"></input>
+                <input value={this.state.room} onChange={this.updateState('room')} type="text" name="room"></input>
               </div>
               <div>
                 <label htmlFor="title"><h2>Project Title</h2></label>
-                <input type="text" name="title" value={this.state.title}></input>
+                <input type="text" name="title" value={this.state.title} onChange={this.updateState('title')}></input>
               </div>
               <div>
                 <label htmlFor="tagline"><h2 >Project Tagline</h2></label>
-                <textarea rows="2" cols="18" type="text" name="tagline" maxLength="140" value={this.state.tagline}></textarea>
+                <textarea rows="2" cols="18" type="text" name="tagline" maxLength="140" value={this.state.tagline} onChange={this.updateState('tagline')}></textarea>
               </div>
             </form>
 
@@ -125,8 +135,17 @@ $(document).ready(function() {
         );
       } else if (this.state.state === STATE.PRESENTING) {
         return (
-          <div>
-            <button onClick={this.disconnect}>Disconnect</button>
+          <div style={{
+            width: '100vw',
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            flexWrap: 'nowrap',
+            justifyContent: 'center',
+            alignContent: 'flex-start',
+            alignItems: 'center'
+          }}>
+            <button className="submit-button" onClick={this.disconnect}>Disconnect</button>
           </div>
         );
       }
