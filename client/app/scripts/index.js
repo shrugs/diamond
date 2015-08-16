@@ -103,6 +103,8 @@ $(document).ready(function () {
 
     render: function render() {
       if (this.state.state === STATE.INITIAL) {
+        var shouldShowSubmitButton = this.state.title !== undefined && this.state.title.length && (this.state.tagline !== undefined && this.state.tagline.length);
+        debugger;
         return React.createElement(
           'div',
           null,
@@ -160,7 +162,7 @@ $(document).ready(function () {
           ),
           React.createElement(
             'button',
-            { className: 'submit-button', onClick: this.onSubmit },
+            { className: 'submit-button', onClick: this.onSubmit, disabled: !shouldShowSubmitButton },
             React.createElement(
               'h2',
               null,

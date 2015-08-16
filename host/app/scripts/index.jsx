@@ -7,9 +7,6 @@ var STATE = {
   WAITING_FOR_CALL: 2,
 }
 
-var CALLS = [
-];
-
 $(document).ready(function() {
 
   var TabSwitcher = React.createClass({
@@ -90,12 +87,12 @@ $(document).ready(function() {
           clearTimeout(this.state.tabTimer);
           this.startTabTimer();
           this.setState({
-            tabIndex: (this.state.tabIndex + 1) % CALLS.length
+            tabIndex: (this.state.tabIndex + 1) % this.state.CALLS.length
           });
         } else {
           this.startTabTimer();
           this.setState({
-            tabIndex: 0
+            tabIndex: this.state.CALLS.length > 1 ? 1 : 0
           });
         }
       });
@@ -104,7 +101,8 @@ $(document).ready(function() {
         state: STATE.INITIAL,
         tabTimer: undefined,
         activeStream: undefined,
-        room: 'Hack the Planet'
+        room: 'Hack the Planet',
+        CALLS: []
       };
     },
 
@@ -141,14 +139,14 @@ $(document).ready(function() {
         call.answer();
         call.on('stream', (remoteStream) => {
           // store the stream url in CALLS, along with metadata
-          CALLS.push({
-            url: window.URL.createObjectURL(remoteStream),
-            metadata: call.metadata,
-            call: call
-          });
           this.setState({
             state: STATE.PRESENTING,
-            activeStream: CALLS.length === 1 ? 0 : this.state.activeStream
+            CALLS: this.state.CALLS.concat({
+              url: window.URL.createObjectURL(remoteStream),
+              metadata: call.metadata,
+              call: call
+            }),
+            activeStream: !this.state.CALLS.length ? 0 : this.state.activeStream
           });
 
         }, function(e) {
@@ -157,11 +155,13 @@ $(document).ready(function() {
         call.on('close', function() {
           console.log('CONNECTION CLOSED');
           // remove from CALLS
-          CALLS = CALLS.filter((c) => {
-            return c.call.peer !== call.peer;
+          this.setState({
+            CALLS: this.state.CALLS.filter((c) => {
+              return c.call.peer !== call.peer;
+            })
           });
 
-          if (!CALLS.length) {
+          if (!this.state.CALLS.length) {
             this.setState({
               state: STATE.WAITING_FOR_CALL
             });
@@ -209,7 +209,7 @@ $(document).ready(function() {
       } else if (this.state.state === STATE.PRESENTING) {
 
         if (this.state.tabTimer !== undefined) {
-          var tabs = CALLS.map((c) => {
+          var tabs = this.state.CALLS.map((c) => {
             return {
               title: c.metadata.title,
               src: c.url,
@@ -219,7 +219,7 @@ $(document).ready(function() {
           r.push(<TabSwitcher key="tabSwitcher" tabIndex={this.state.tabIndex} tabs={tabs}></TabSwitcher>);
         }
 
-        var src = CALLS[this.state.activeStream].url;
+        var src = this.state.CALLS[this.state.activeStream].url;
         r.push (
           <video id="video" key="presenting" src={src} autoPlay></video>
         );

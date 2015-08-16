@@ -103,6 +103,8 @@ $(document).ready(function() {
 
     render: function() {
       if (this.state.state === STATE.INITIAL) {
+        var shouldShowSubmitButton = (this.state.title !== undefined && this.state.title.length) && (this.state.tagline !== undefined && this.state.tagline.length);
+        debugger;
         return (
           <div>
             <img className="logo" src="images/logo.png"></img>
@@ -123,7 +125,7 @@ $(document).ready(function() {
               </div>
             </form>
 
-            <button className="submit-button" onClick={this.onSubmit}><h2>Step up!</h2></button>
+            <button className="submit-button" onClick={this.onSubmit} disabled={!shouldShowSubmitButton}><h2>Step up!</h2></button>
           </div>
         );
       } else if (this.state.state === STATE.WAITING) {

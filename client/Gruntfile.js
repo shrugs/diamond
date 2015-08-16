@@ -373,11 +373,11 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('build', [
-    'babel',
     'clean:dist',
     'chromeManifest:dist',
     'useminPrepare',
     'concurrent:dist',
+    'babel',
     'concat',
     'cssmin',
     'uglify',

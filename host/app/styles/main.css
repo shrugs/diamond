@@ -83,6 +83,10 @@ button:focus, input[type="button"]:focus {
   background-color: #1796E1;
 }
 
+.submit-button:disabled {
+  background-color: #9BDAFF;
+}
+
 input[name="room"] {
   width: 180px;
   font-family: 'Avenir-Medium';

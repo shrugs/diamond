@@ -5,7 +5,12 @@ chrome.app.runtime.onLaunched.addListener(function() {
 
   chrome.app.window.create('index.html', {
     id: 'main',
-    state: 'fullscreen'
+    bounds: {
+      width: 300,
+      height: 600,
+      top: Math.floor(screen.availHeight / 2),
+      left: Math.floor(screen.availWidth / 2)
+    }
   });
 
 });

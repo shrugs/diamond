@@ -67,6 +67,10 @@ button:focus, input[type="button"]:focus {
   background-color: #1796E1;
 }
 
+.submit-button:disabled {
+  background-color: #9BDAFF;
+}
+
 .submit-button h2 {
   margin-top: 6px;
 }
