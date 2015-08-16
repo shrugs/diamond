@@ -6,18 +6,15 @@ $(document).ready(function() {
   var peer = new Peer({key: PEER_API_KEY});
 
   $('.submit-button').on('click', function() {
-    connectToHost('htp', {
-      team: 'Team Kickass',
-      title: 'My Super Duper Cool Hack'
+    connectToHost($('#room').val(), {
+      title: $('#title').val(),
+      tagline: $('#tagline').val()
     });
   })
 
-  /*
-    FNs
-  */
-
 
   function connectToHost(host, metadata) {
+    console.log(host, metadata);
     chrome.desktopCapture.chooseDesktopMedia(["screen", "window"], function(id) {
       if (!id) {
         console.log('REJECTED');
@@ -25,7 +22,7 @@ $(document).ready(function() {
       }
 
       navigator.webkitGetUserMedia({
-        audio: true,
+        audio: false,
         video: {
             mandatory: {
                 chromeMediaSource: 'desktop',

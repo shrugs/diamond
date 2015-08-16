@@ -27,37 +27,34 @@ $(document).ready(function () {
     },
 
     answerCall: function answerCall(call) {
+      var _this = this;
+
       call.answer();
       call.on('stream', function (remoteStream) {
-        // Show stream in some video/canvas element.
-        var v = this.refs.video;
-        this.setState({
-          videoSrc: window.URL.createObjectURL(remoteStream)
+        _this.setState({
+          state: STATE.PRESENTING
         });
+        var v = $('#video').get(0);
+        v.src = window.URL.createObjectURL(remoteStream);
         v.play();
+      });
+      call.on('close', function () {
+        // remove from pending calls
+        delete CALLS[call.peer];
       });
     },
 
     createRoom: function createRoom(e) {
-      var _this = this;
+      var _this2 = this;
 
+      console.log(this.state.room);
       var peer = new Peer(this.state.room, { key: PEER_API_KEY });
 
       peer.on('call', function (call) {
 
-        console.log('WHAT THJE FUCK');
         // add to pending calls
         CALLS[call.peer] = call;
-
-        _this.setState({
-          state: STATE.PRESENTING
-        });
-        _this.answerCall(call);
-
-        call.on('close', function () {
-          // remove from pending calls
-          delete CALLS[call.peer];
-        });
+        _this2.answerCall(call);
       });
 
       this.setState({
@@ -65,9 +62,9 @@ $(document).ready(function () {
       });
     },
 
-    inputChange: function inputChange(newValue) {
+    roomChange: function roomChange(event) {
       this.setState({
-        room: newValue
+        room: event.target.value
       });
     },
 
@@ -102,7 +99,7 @@ $(document).ready(function () {
               React.createElement('input', {
                 type: 'text',
                 defaultValue: 'Hack the Planet',
-                onChange: this.inputChange,
+                onChange: this.roomChange,
                 ref: 'room',
                 name: 'room' })
             )
@@ -120,17 +117,20 @@ $(document).ready(function () {
       } else if (this.state.state === STATE.WAITING_FOR_CALL) {
         return React.createElement(
           'div',
-          null,
-          'WAITING @TODO(shrugs) - Make this be like "Join room ',
-          this.state.room,
-          '"'
+          { style: { textAlign: 'center', fontSize: '6vw' } },
+          React.createElement(
+            'h3',
+            null,
+            'Join Room'
+          ),
+          React.createElement(
+            'h1',
+            null,
+            this.state.room
+          )
         );
       } else if (this.state.state === STATE.PRESENTING) {
-        return React.createElement(
-          'div',
-          null,
-          React.createElement('video', { ref: 'video', src: this.state.videoSrc })
-        );
+        return React.createElement('div', null);
       }
     }
 

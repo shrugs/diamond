@@ -38,14 +38,14 @@ module.exports = function (grunt) {
         files: ['<%= config.app %>/scripts/{,*/}*.jsx'],
         tasks: ['babel'],
         options: {
-          livereload: true
+          // livereload: true
         }
       },
       js: {
         files: ['<%= config.app %>/scripts/main.js'],
         tasks: ['jshint'],
         options: {
-          livereload: true
+          // livereload: true
         }
       },
       gruntfile: {
@@ -55,7 +55,7 @@ module.exports = function (grunt) {
         files: ['<%= config.app %>/styles/{,*/}*.css'],
         tasks: [],
         options: {
-          livereload: true
+          // livereload: true
         }
       },
       livereload: {

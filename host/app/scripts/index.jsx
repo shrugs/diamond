@@ -28,35 +28,30 @@ $(document).ready(function() {
 
     answerCall: function(call) {
       call.answer();
-      call.on('stream', function(remoteStream) {
-        // Show stream in some video/canvas element.
-        var v = this.refs.video;
+      call.on('stream', (remoteStream) => {
         this.setState({
-          videoSrc: window.URL.createObjectURL(remoteStream)
-        });
+          state: STATE.PRESENTING
+        })
+        var v = $('#video').get(0);
+        v.src = window.URL.createObjectURL(remoteStream);
         v.play();
+      });
+      call.on('close', function() {
+        // remove from pending calls
+        delete CALLS[call.peer];
       });
     },
 
     createRoom: function(e) {
 
+      console.log(this.state.room);
       var peer = new Peer(this.state.room, {key: PEER_API_KEY});
 
       peer.on('call', call => {
 
-        console.log('WHAT THJE FUCK');
         // add to pending calls
         CALLS[call.peer] = call;
-
-        this.setState({
-          state: STATE.PRESENTING
-        });
         this.answerCall(call);
-
-        call.on('close', function() {
-          // remove from pending calls
-          delete CALLS[call.peer];
-        });
       });
 
       this.setState({
@@ -64,9 +59,9 @@ $(document).ready(function() {
       });
     },
 
-    inputChange: function(newValue) {
+    roomChange: function(event) {
       this.setState({
-        room: newValue
+        room: event.target.value
       });
     },
 
@@ -87,7 +82,7 @@ $(document).ready(function() {
                 <input
                   type="text"
                   defaultValue="Hack the Planet"
-                  onChange={this.inputChange}
+                  onChange={this.roomChange}
                   ref="room"
                   name="room">
                 </input>
@@ -102,15 +97,14 @@ $(document).ready(function() {
         );
       } else if (this.state.state === STATE.WAITING_FOR_CALL) {
         return (
-          <div>
-            WAITING @TODO(shrugs) - Make this be like "Join room {this.state.room}"
+          <div style={{textAlign: 'center', fontSize: '6vw'}}>
+            <h3>Join Room</h3>
+            <h1>{this.state.room}</h1>
           </div>
         );
       } else if (this.state.state === STATE.PRESENTING) {
         return (
-          <div>
-            <video ref="video" src={this.state.videoSrc}></video>
-          </div>
+          <div></div>
         );
       }
     }
