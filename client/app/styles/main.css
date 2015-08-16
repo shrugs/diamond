@@ -28,7 +28,7 @@ html, body {
   margin-bottom: 6px;
 }
 
-#logo {
+.logo {
   height: 40px;
   margin-bottom: -30px;
 }
@@ -38,17 +38,37 @@ video {
   height: 100%;
 }
 
+form {
+  margin-bottom: 20px;
+}
+
+form label {
+  margin-bottom: 6px;
+}
+
 button:focus, input[type="button"]:focus {
     outline: none;
 }
 
 .submit-button {
-  font-family: 'Avenir-Medium';width:140px;height:40px;border-radius:4px;background-color:#29AFFF;color:white;margin-bottom:20px;border: none;
+  font-family: 'Avenir-Medium';
+  width: 140px;
+  height: 40px;
+  border-radius: 4px;
+  background-color: #29AFFF;
+  color: white;
+  margin-bottom: 20px;
+  border: none;
   cursor: pointer;
+  margin-top: 5px;
 }
 
 .submit-button:hover {
   background-color: #1796E1;
+}
+
+.submit-button h2 {
+  margin-top: 6px;
 }
 
 textarea{
@@ -64,7 +84,7 @@ textarea{
 
 }
 
-#title, #room {
+form input {
   width: 180px;
   font-family: 'Avenir-Medium';
   border: none;

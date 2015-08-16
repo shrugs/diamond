@@ -71,7 +71,7 @@ $(document).ready(function() {
 
         return (
           <div>
-            <img id="logo" src="images/logo.png"></img>
+            <img className="logo" src="images/logo.png"></img>
             <h1 className="diamond">diamond</h1>
 
             <form>

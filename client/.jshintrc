@@ -21,6 +21,7 @@
     "globals" : {
         "chrome": true,
         "$": true,
-        "Peer": true
+        "Peer": true,
+        "React": true
     }
 }

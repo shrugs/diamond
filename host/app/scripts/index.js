@@ -8,7 +8,7 @@ var STATE = {
 };
 
 var CALLS = {};
-console.log('k');
+
 $(document).ready(function () {
 
   key('ctrl+tab', function () {
@@ -75,7 +75,7 @@ $(document).ready(function () {
         return React.createElement(
           'div',
           null,
-          React.createElement('img', { id: 'logo', src: 'images/logo.png' }),
+          React.createElement('img', { className: 'logo', src: 'images/logo.png' }),
           React.createElement(
             'h1',
             { className: 'diamond' },
