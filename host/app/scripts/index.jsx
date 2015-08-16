@@ -102,7 +102,13 @@ $(document).ready(function() {
         tabTimer: undefined,
         activeStream: undefined,
         room: 'Hack the Planet',
-        CALLS: []
+        CALLS: [
+          {
+            url: 'test',
+            metadata: {title: 'My Title', tagline: 'My tagline'},
+            call: {}
+          }
+        ]
       };
     },
 
