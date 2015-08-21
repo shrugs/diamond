@@ -43,7 +43,7 @@ $(document).ready(function () {
           React.createElement(
             'h1',
             { style: {
-                marginTop: _this.props.tabIndex === i ? '0' : '4px',
+                marginTop: _this.props.tabIndex === i ? '1px' : '4px',
                 marginBottom: '2px'
               } },
             tab.title
@@ -110,7 +110,7 @@ $(document).ready(function () {
         } else {
           _this2.startTabTimer();
           _this2.setState({
-            tabIndex: _this2.state.CALLS.length > 1 ? 1 : 0
+            tabIndex: _this2.state.CALLS.length > 1 ? (_this2.state.tabIndex + 1) % _this2.state.CALLS.length : 0
           });
         }
       });
@@ -118,6 +118,7 @@ $(document).ready(function () {
       return {
         state: STATE.INITIAL,
         tabTimer: undefined,
+        tabIndex: 0,
         activeStream: undefined,
         room: 'Hack the Planet',
         CALLS: [
@@ -184,14 +185,14 @@ $(document).ready(function () {
         call.on('close', function () {
           console.log('CONNECTION CLOSED');
           // remove from CALLS
-          this.setState({
-            CALLS: this.state.CALLS.filter(function (c) {
+          _this3.setState({
+            CALLS: _this3.state.CALLS.filter(function (c) {
               return c.call.peer !== call.peer;
             })
           });
 
-          if (!this.state.CALLS.length) {
-            this.setState({
+          if (!_this3.state.CALLS.length) {
+            _this3.setState({
               state: STATE.WAITING_FOR_CALL
             });
           }
@@ -278,7 +279,7 @@ $(document).ready(function () {
         var src = this.state.CALLS[this.state.activeStream].url;
         r.push(React.createElement(
           'div',
-          { style: {
+          { key: 'presenting', style: {
               backgroundColor: '#000',
               height: '100vh',
               display: 'flex',
@@ -288,7 +289,7 @@ $(document).ready(function () {
               alignContent: 'flex-start',
               alignItems: 'center'
             } },
-          React.createElement('video', { id: 'video', key: 'presenting', src: src, autoPlay: true })
+          React.createElement('video', { className: 'video', src: src, autoPlay: true })
         ));
       }
 

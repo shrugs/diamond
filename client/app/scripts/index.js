@@ -49,10 +49,22 @@ $(document).ready(function () {
             }
           }
         }, function (stream) {
+          var _this = this;
+
           var call = peer.call(host, stream, { metadata: metadata || {} });
 
-          call.on('error', console.log.bind(console));
-          call.on('close', console.log.bind(console));
+          call.on('error', function () {
+            _this.setState({
+              state: STATE.INITIAL,
+              call: undefined
+            });
+          });
+          call.on('close', function () {
+            _this.setState({
+              state: STATE.INITIAL,
+              call: undefined
+            });
+          });
           that.setState({
             state: STATE.WAITING,
             call: call

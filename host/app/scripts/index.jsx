@@ -36,7 +36,7 @@ $(document).ready(function() {
               border: this.props.tabIndex === i ? '4px solid white' : 'none'
             }}></video>
             <h1 style={{
-              marginTop: this.props.tabIndex === i ? '0' : '4px',
+              marginTop: this.props.tabIndex === i ? '1px' : '4px',
               marginBottom: '2px'
             }}>{tab.title}</h1>
             <p style={{
@@ -94,7 +94,7 @@ $(document).ready(function() {
         } else {
           this.startTabTimer();
           this.setState({
-            tabIndex: this.state.CALLS.length > 1 ? 1 : 0
+            tabIndex: this.state.CALLS.length > 1 ? (this.state.tabIndex + 1) % this.state.CALLS.length : 0
           });
         }
       });
@@ -102,6 +102,7 @@ $(document).ready(function() {
       return {
         state: STATE.INITIAL,
         tabTimer: undefined,
+        tabIndex: 0,
         activeStream: undefined,
         room: 'Hack the Planet',
         CALLS: [
@@ -165,7 +166,7 @@ $(document).ready(function() {
         }, function(e) {
           debugger;
         });
-        call.on('close', function() {
+        call.on('close', () => {
           console.log('CONNECTION CLOSED');
           // remove from CALLS
           this.setState({
@@ -234,7 +235,7 @@ $(document).ready(function() {
 
         var src = this.state.CALLS[this.state.activeStream].url;
         r.push (
-          <div style={{
+          <div key="presenting" style={{
             backgroundColor: '#000',
             height: '100vh',
             display: 'flex',
@@ -244,7 +245,7 @@ $(document).ready(function() {
             alignContent: 'flex-start',
             alignItems: 'center'
           }}>
-            <video id="video" key="presenting" src={src} autoPlay></video>
+            <video className="video" src={src} autoPlay></video>
           </div>
         );
       }
