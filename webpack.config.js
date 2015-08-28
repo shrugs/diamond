@@ -2,7 +2,10 @@
 import path from 'path';
 
 module.exports = {
-  entry: path.resolve(__dirname, 'src/app/index.js'),
+  entry: {
+    app: path.resolve(__dirname, 'src/app/scripts/entry.js'),
+    background: path.resolve(__dirname, 'src/background/background.js'),
+  },
   output: {
     path: path.resolve(__dirname, 'build'),
     // publicPath: path.resolve(__dirname, ''),
@@ -29,4 +32,9 @@ module.exports = {
   },
   plugins: [
   ],
+  resolveLoader: {
+    alias: {
+      'copy': 'file-loader?name=[path][name].[ext]&context=./src',
+    },
+  },
 };

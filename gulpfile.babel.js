@@ -2,20 +2,19 @@
 import gulp from 'gulp';
 import gutil from 'gulp-util';
 import webpack from 'webpack';
-import WebpackDevServer from 'webpack-dev-server';
 import webpackConfig from './webpack.config.js';
 
-import path from 'path';
+// import path from 'path';
 
-// The development server (the recommended option for development)
-gulp.task('default', ['webpack-dev-server']);
+// default to dev-build
+gulp.task('default', ['build-dev']);
 
 // Build and watch cycle (another option for development)
 // Advantage: No server required, can run app from filesystem
 // Disadvantage: Requests are not blocked until bundle is available,
 //               can serve an old app on refresh
 gulp.task('build-dev', ['webpack:build-dev'], () => {
-  gulp.watch(['app/**/*'], ['webpack:build-dev']);
+  gulp.watch(['src/**/*'], ['webpack:build-dev']);
 });
 
 // Production build
@@ -61,22 +60,5 @@ gulp.task('webpack:build-dev', (callback) => {
       colors: true,
     }));
     callback();
-  });
-});
-
-gulp.task('webpack-dev-server', () => {
-  // modify some webpack config options
-  var myConfig = Object.create(webpackConfig);
-  myConfig.devtool = 'eval';
-  myConfig.debug = true;
-
-  // Start a webpack-dev-server
-  new WebpackDevServer(webpack(myConfig), {
-    stats: {
-      colors: true,
-    },
-  }).listen(8080, 'localhost', (err) => {
-    if(err) throw new gutil.PluginError('webpack-dev-server', err);
-    gutil.log('[webpack-dev-server]', 'http://localhost:8080/webpack-dev-server/index.html');
   });
 });
