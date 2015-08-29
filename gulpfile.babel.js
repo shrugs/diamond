@@ -4,6 +4,7 @@ import gutil from 'gulp-util';
 import webpack from 'webpack';
 import webpackConfig from './webpack.config.js';
 import imagemin from 'gulp-imagemin';
+import del from 'del';
 
 import path from 'path';
 
@@ -112,4 +113,11 @@ gulp.task('webpack:build-dev', (callback) => {
     }));
     callback();
   });
+});
+
+gulp.task('clean', (cb) => {
+  del([
+    'dist/**/*',
+    'build/**/*',
+  ], cb);
 });

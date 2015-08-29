@@ -1,13 +1,14 @@
 'use strict';
 import path from 'path';
 
-import ReactStylePlugin from 'react-style-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 module.exports = {
+  devtool: 'source-map',
   entry: {
     app: path.resolve(__dirname, 'src/app/components/app.js'),
     background: path.resolve(__dirname, 'src/background/background.js'),
+    styles: path.resolve(__dirname, 'src/app/styles/main.scss'),
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -17,15 +18,15 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.css$/,
+        test: /\.scss$/,
         include: path.resolve(__dirname, 'src/app/styles'),
-        loader: ExtractTextPlugin.extract('css-loader'),
+        loader: ExtractTextPlugin.extract('css?sourceMap!' + 'sass?sourceMap'),
       },
       {
         test: /\.jsx?$/,
         include: path.resolve(__dirname, 'src'),
         exclude: /(node_modules|bower_components)/,
-        loaders: [ReactStylePlugin.loader(), 'babel'],
+        loaders: ['babel'],
       },
       {
         test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$/,
@@ -34,7 +35,7 @@ module.exports = {
     ],
   },
   plugins: [
-    new ReactStylePlugin('styles.bundle.css'),
+    new ExtractTextPlugin('styles.bundle.css'),
   ],
   resolveLoader: {
     alias: {

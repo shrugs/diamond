@@ -17,10 +17,6 @@ import Page2 from './Page2';
 // require('../styles/main.css');
 
 class App extends React.Component {
-  contextTypes: {
-    router: React.PropTypes.func
-  }
-
   render() {
     return (
       <div>
@@ -35,7 +31,6 @@ class App extends React.Component {
     );
   }
 }
-
 
 var routes = (
   <Route handler={App}>

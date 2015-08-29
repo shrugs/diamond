@@ -1,10 +1,14 @@
 {
     "appName": {
-        "message": "diamond",
+        "message": "Diamond - Presentations that Don't Suck",
         "description": "The name of the application"
     },
     "appDescription": {
-        "message": "My Chrome App",
+        "message": "Video multiplexer for presentations.",
         "description": "The description of the application"
+    },
+    "shortName": {
+        "message": "Diamond",
+        "description": "The short name of the application"
     }
 }
