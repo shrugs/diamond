@@ -1,6 +1,6 @@
 'use strict';
 
-import React from 'react';
+import React from 'react/addons';
 var { CSSTransitionGroup } = React.addons;
 import Router from 'react-router';
 var {
@@ -14,7 +14,7 @@ import Index from './Index';
 import Page1 from './Page1';
 import Page2 from './Page2';
 
-require('../styles/main.css');
+// require('../styles/main.css');
 
 class App extends React.Component {
   contextTypes: {
