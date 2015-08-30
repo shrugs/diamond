@@ -8,4 +8,8 @@ export default StyleSheet.create({
     height: '100vh',
     width: '100vw',
   },
+  button: {
+    paddingLeft: '10px',
+    paddingRight: '10px',
+  },
 });

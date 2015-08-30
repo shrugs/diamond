@@ -27,6 +27,13 @@ class ClientIndex extends React.Component {
   constructor() {
     super();
     this.onSubmit = this.onSubmit.bind(this);
+    this.syncToState = this.syncToState.bind(this);
+
+    this.state = {
+      room: '',
+      title: '',
+      tagline: '',
+    };
   }
 
   componentDidMount() {
@@ -44,24 +51,42 @@ class ClientIndex extends React.Component {
     this.context.router.transitionTo('error', {error: 'lsjfadsfjsf'}, {backTo: '/'});
   }
 
+  syncToState(k) {
+    return (e) => {
+      var s = {};
+      s[k] = e.target.value;
+      this.setState(s);
+    };
+  }
+
   render() {
+    var allowConnect = this.state.room.length > 0 &&
+                       this.state.title.length > 0 &&
+                       this.state.tagline.length > 0;
     return(
       <div styles={[full]}>
         <Banner styles={[styles.banner]} />
         <div styles={[styles.form]}>
           <TextField
             ref="room"
+            onChange={this.syncToState('room')}
             hintText="my-event"
             floatingLabelText="Room" />
           <TextField
             ref="title"
+            onChange={this.syncToState('title')}
             hintText="My Presentation"
             floatingLabelText="Title" />
           <TextField
             ref="tagline"
+            onChange={this.syncToState('tagline')}
             hintText="A quick summary..."
             floatingLabelText="Tagline" />
-          <FlatButton style={styles.submit} onClick={this.onSubmit} primary={true}>Connect</FlatButton>
+          <FlatButton
+            style={styles.submit}
+            onClick={this.onSubmit}
+            primary={true}
+            disabled={!allowConnect}>Connect</FlatButton>
         </div>
         <div styles={[styles.footer]}>
           <LinkButton to="host">Become a Host</LinkButton>

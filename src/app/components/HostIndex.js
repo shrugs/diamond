@@ -15,9 +15,10 @@ import {
   TextField,
 } from 'material-ui';
 
-import { full } from './styles/base';
+import { full, button } from './styles/base';
 import Banner from './Banner';
 import LinkButton from './LinkButton';
+import ImagePicker from './ImagePicker';
 
 
 class HostIndex extends React.Component {
@@ -25,6 +26,13 @@ class HostIndex extends React.Component {
   constructor() {
     super();
     this.onSubmit = this.onSubmit.bind(this);
+    this.onImage = this.onImage.bind(this);
+    this.onRoomChange = this.onRoomChange.bind(this);
+
+    this.state = {
+      validImg: false,
+      validRoom: false,
+    };
   }
 
   componentDidMount() {
@@ -33,9 +41,24 @@ class HostIndex extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    // var room = this.refs.room.getValue();
-    // console.log(room);
+
+    console.log(this.state);
     this.context.router.transitionTo('/host/present');
+  }
+
+  onImage(img) {
+    this.setState({
+      validImg: img !== undefined,
+      img: img,
+    });
+  }
+
+  onRoomChange() {
+    // validate room name
+    this.setState({
+      validRoom: true,
+      room: this.refs.room.getValue(),
+    });
   }
 
   render() {
@@ -45,9 +68,16 @@ class HostIndex extends React.Component {
         <div styles={[styles.form]}>
           <TextField
             ref="room"
+            onChange={this.onRoomChange}
             hintText="my-event"
             floatingLabelText="Room" />
-          <FlatButton style={styles.submit} onClick={this.onSubmit} primary={true}>Begin Hosting</FlatButton>
+          <ImagePicker onImage={this.onImage}>Choose a Default Image</ImagePicker>
+
+          <FlatButton
+            styles={[button, styles.submit]}
+            onClick={this.onSubmit}
+            primary={true}
+            disabled={!(this.state.validImg && this.state.validRoom)}>Begin Hosting</FlatButton>
         </div>
         <div styles={[styles.footer]}>
           <LinkButton to="/">Become a Client</LinkButton>
@@ -73,7 +103,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
   },
   submit: {
-    marginTop: '20px',
+    marginTop: '30px',
   },
   footer: {
     height: '10vh',

@@ -11,7 +11,8 @@
         "audioCapture",
         "contextMenus",
         "desktopCapture",
-        "fullscreen"
+        "fullscreen",
+        "fileSystem"
     ],
     "icons": {
         "16": "images/icon-16.png",
