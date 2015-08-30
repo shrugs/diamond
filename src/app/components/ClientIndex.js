@@ -9,8 +9,16 @@
 
 import React from 'react';
 import StyleSheet from 'react-style';
-import { Link } from 'react-router';
-import { full, button } from './styles/base';
+
+import {
+  FlatButton,
+  TextField,
+} from 'material-ui';
+
+import {
+  full,
+  input,
+} from './styles/base';
 import Banner from './Banner';
 
 class ClientIndex extends React.Component {
@@ -20,25 +28,33 @@ class ClientIndex extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidMount() {
+    this.refs.title.focus();
+  }
+
   onSubmit(e) {
     e.preventDefault();
     var metadata = {
-      name: React.findDOMNode(this.refs.name).value,
-      tagline: React.findDOMNode(this.refs.tagline).value,
+      title: this.refs.title.getValue(),
+      tagline: this.refs.tagline.getValue(),
     };
     console.log(metadata);
-    this.context.router.transitionTo('error', {error: 'lsjfadsfjsf'}, {backTo: '/'});
+    // this.context.router.transitionTo('error', {error: 'lsjfadsfjsf'}, {backTo: '/'});
   }
 
   render() {
     return(
       <div styles={[full]}>
         <Banner styles={[styles.banner]} />
-        <form onSubmit={this.onSubmit}>
-          <input type="text" ref="name" />
-          <input type="text" ref="tagline" />
-          <button type="submit">Submit</button>
-        </form>
+        <div styles={[styles.form]}>
+          <TextField
+            ref="title"
+            floatingLabelText="Title" />
+          <TextField
+            ref="tagline"
+            floatingLabelText="Tagline" />
+          <FlatButton style={styles.submit} onClick={this.onSubmit} primary={true}>Submit</FlatButton>
+        </div>
       </div>
     );
   }
@@ -51,6 +67,15 @@ ClientIndex.contextTypes = {
 var styles = StyleSheet.create({
   banner: {
     height: '30vh',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  submit: {
+    marginTop: '20px',
   },
 });
 

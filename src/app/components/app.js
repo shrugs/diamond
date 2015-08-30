@@ -1,6 +1,14 @@
 'use strict';
 
 import React from 'react/addons';
+
+import { palette } from './styles/base';
+
+import mui from 'material-ui';
+var ThemeManager = new mui.Styles.ThemeManager();
+ThemeManager.setTheme(ThemeManager.types.LIGHT);
+ThemeManager.setPalette(palette);
+
 var { CSSTransitionGroup } = React.addons;
 import Router from 'react-router';
 var {
@@ -15,6 +23,18 @@ import ErrorPage from './ErrorPage';
 import Streaming from './Streaming';
 
 class App extends React.Component {
+
+  getChildContext() {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme(),
+    };
+  }
+
+  componentWillMount() {
+    // ThemeManager.setComponentThemes({
+    // });
+  }
+
   render() {
     return (
       <CSSTransitionGroup component="div" transitionName="fade">
@@ -23,6 +43,10 @@ class App extends React.Component {
     );
   }
 }
+
+App.childContextTypes = {
+  muiTheme: React.PropTypes.object,
+};
 
 var routes = (
   <Route handler={App}>

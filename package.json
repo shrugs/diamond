@@ -39,7 +39,9 @@
     "webpack-dev-server": "^1.10.1"
   },
   "dependencies": {
+    "material-ui": "^0.11.0",
     "react": "^0.13.3",
-    "react-style": "^0.5.5"
+    "react-style": "^0.5.5",
+    "react-tap-event-plugin": "^0.1.7"
   }
 }

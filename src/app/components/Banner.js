@@ -16,7 +16,7 @@ export default class Banner extends React.Component {
 
 }
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -27,6 +27,7 @@ var styles = StyleSheet.create({
     height: '70%',
   },
   title: {
+    fontFamily: 'Roboto, sans-serif',
     margin: '0',
   },
 });

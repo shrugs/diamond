@@ -5,6 +5,7 @@
     "version": "10",
     "manifest_version": 2,
     "default_locale": "en",
+    "minimum_chrome_version": "23",
     "permissions": [
         "app.window",
         "audioCapture",
