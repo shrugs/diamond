@@ -33,12 +33,12 @@ class ClientIndex extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    var metadata = {
-      room: this.refs.room.getValue(),
-      title: this.refs.title.getValue(),
-      tagline: this.refs.tagline.getValue(),
-    };
-    console.log(metadata);
+    // var metadata = {
+    //   room: this.refs.room.getValue(),
+    //   title: this.refs.title.getValue(),
+    //   tagline: this.refs.tagline.getValue(),
+    // };
+    // console.log(metadata);
     this.context.router.transitionTo('error', {error: 'lsjfadsfjsf'}, {backTo: '/'});
   }
 

@@ -9,7 +9,6 @@ var ThemeManager = new mui.Styles.ThemeManager();
 ThemeManager.setTheme(ThemeManager.types.LIGHT);
 ThemeManager.setPalette(palette);
 
-var { CSSTransitionGroup } = React.addons;
 import Router from 'react-router';
 var {
   Route,
@@ -18,9 +17,12 @@ var {
 } = Router;
 
 import ClientIndex from './ClientIndex';
+import PresentationWrapper from './PresentationWrapper';
 import HostIndex from './HostIndex';
 import ErrorPage from './ErrorPage';
 import Streaming from './Streaming';
+
+import { FlatButton } from 'material-ui';
 
 class App extends React.Component {
 
@@ -31,11 +33,18 @@ class App extends React.Component {
   }
 
   render() {
-    // <CSSTransitionGroup component="div" transitionName="fade">
-    //   <RouteHandler key={window.location}/>
-    // </CSSTransitionGroup>
     return (
-      <RouteHandler key={window.location}/>
+      <div>
+        <FlatButton
+          style={{
+            position: 'absolute',
+            top: '0',
+            left: '0',
+            zIndex: '9999',
+          }}
+          onClick={() => chrome.runtime.reload()} >Reload</FlatButton>
+        <RouteHandler key={window.location}/>
+      </div>
     );
   }
 }
@@ -50,7 +59,9 @@ var routes = (
     <Route name="error" path="error/:error" handler={ErrorPage} />
     <Route path="streaming" handler={Streaming} />
 
-    <Route name="host" path="host" handler={HostIndex}>
+    <Route name="host" path="host" handler={PresentationWrapper}>
+      <DefaultRoute handler={HostIndex} />
+      <Route name="fuck" path="error" handler={ErrorPage} />
     </Route>
   </Route>
 );

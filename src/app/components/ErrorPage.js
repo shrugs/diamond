@@ -5,8 +5,6 @@ import { full } from './styles/base';
 import StyleSheet from 'react-style';
 import LinkButton from './LinkButton';
 
-console.log(full);
-
 export default class ErrorPage extends React.Component {
   render() {
     return (

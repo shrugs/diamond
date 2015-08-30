@@ -33,9 +33,9 @@ class HostIndex extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    var room = this.refs.room.getValue();
-    console.log(room);
-    this.context.router.transitionTo('error', {error: 'lsjfadsfjsf'}, {backTo: '/'});
+    // var room = this.refs.room.getValue();
+    // console.log(room);
+    this.context.router.transitionTo('fuck', {error: 'lsjfadsfjsf'}, {backTo: '/'});
   }
 
   render() {
