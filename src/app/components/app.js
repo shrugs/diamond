@@ -5,38 +5,33 @@ var { CSSTransitionGroup } = React.addons;
 import Router from 'react-router';
 var {
   Route,
-  Link,
   RouteHandler,
   DefaultRoute,
 } = Router;
 
-import Index from './Index';
-import Page1 from './Page1';
-import Page2 from './Page2';
-
-// require('../styles/main.css');
+import ClientIndex from './ClientIndex';
+import HostIndex from './HostIndex';
+import ErrorPage from './ErrorPage';
+import Streaming from './Streaming';
 
 class App extends React.Component {
   render() {
     return (
-      <div>
-        <ul>
-          <li><Link to="/page1">Page 1</Link></li>
-          <li><Link to="/page2">Page 2</Link></li>
-        </ul>
-        <CSSTransitionGroup component="div" transitionName="fade">
-          <RouteHandler key={window.location}/>
-        </CSSTransitionGroup>
-      </div>
+      <CSSTransitionGroup component="div" transitionName="fade">
+        <RouteHandler key={window.location}/>
+      </CSSTransitionGroup>
     );
   }
 }
 
 var routes = (
   <Route handler={App}>
-    <DefaultRoute handler={Index}/>
-    <Route path="page1" handler={Page1} />
-    <Route path="page2" handler={Page2} />
+    <DefaultRoute handler={ClientIndex}/>
+    <Route name="error" path="error/:error" handler={ErrorPage} />
+    <Route path="streaming" handler={Streaming} />
+
+    <Route path="host" handler={HostIndex}>
+    </Route>
   </Route>
 );
 
