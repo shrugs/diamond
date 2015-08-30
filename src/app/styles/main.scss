@@ -23,7 +23,7 @@ html, body {
 
 .fade-enter.fade-enter-active {
   opacity: 1;
-  transition: opacity .5s ease-in;
+  transition: opacity .3s ease-in;
 }
 
 .fade-leave {
@@ -32,5 +32,5 @@ html, body {
 
 .fade-leave.fade-leave-active {
   opacity: 0.01;
-  transition: opacity .5s ease-in;
+  transition: opacity .3s ease-in;
 }

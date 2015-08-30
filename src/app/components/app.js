@@ -2,7 +2,7 @@
 
 import React from 'react/addons';
 
-import { palette } from './styles/base';
+import { palette } from './styles/constants';
 
 import mui from 'material-ui';
 var ThemeManager = new mui.Styles.ThemeManager();
@@ -30,16 +30,12 @@ class App extends React.Component {
     };
   }
 
-  componentWillMount() {
-    // ThemeManager.setComponentThemes({
-    // });
-  }
-
   render() {
+    // <CSSTransitionGroup component="div" transitionName="fade">
+    //   <RouteHandler key={window.location}/>
+    // </CSSTransitionGroup>
     return (
-      <CSSTransitionGroup component="div" transitionName="fade">
-        <RouteHandler key={window.location}/>
-      </CSSTransitionGroup>
+      <RouteHandler key={window.location}/>
     );
   }
 }
@@ -54,7 +50,7 @@ var routes = (
     <Route name="error" path="error/:error" handler={ErrorPage} />
     <Route path="streaming" handler={Streaming} />
 
-    <Route path="host" handler={HostIndex}>
+    <Route name="host" path="host" handler={HostIndex}>
     </Route>
   </Route>
 );
