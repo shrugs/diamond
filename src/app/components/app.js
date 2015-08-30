@@ -12,10 +12,10 @@ ThemeManager.setTheme(ThemeManager.types.LIGHT);
 ThemeManager.setPalette(palette);
 
 import ClientIndex from './ClientIndex';
-import PresentationWrapper from './PresentationWrapper';
 import HostIndex from './HostIndex';
 import ErrorPage from './ErrorPage';
 import Streaming from './Streaming';
+import Presenter from './Presenter';
 
 import { FlatButton } from 'material-ui';
 
@@ -35,7 +35,7 @@ class App extends React.Component {
             left: '0',
             zIndex: '9999',
           }}
-          onClick={() => chrome.runtime.reload()} >Reload</FlatButton>
+          onClick={() => chrome.runtime.reload()}>Reload</FlatButton>
         {this.props.children}
       </div>
     );
@@ -47,18 +47,17 @@ App.childContextTypes = {
 };
 
 React.render(
-  <Router history={new HashHistory()}>
+  <Router history={new HashHistory({queryKey: true})}>
     <Route component={App}>
       <Route path="/" component={ClientIndex} />
       <Route path="error" component={ErrorPage} />
       <Route path="streaming" component={Streaming} />
 
-      <Route path="host" component={PresentationWrapper}>
-        <Route path="/" component={HostIndex} />
-        <Route path="error" component={ErrorPage} />
+      <Route path="host" component={HostIndex}>
+        <Route path="present" component={Presenter} />
       </Route>
-    </Route>
 
+    </Route>
   </Router>,
   document.getElementById('app')
 );

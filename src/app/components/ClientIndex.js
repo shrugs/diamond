@@ -15,6 +15,8 @@ import {
   TextField,
 } from 'material-ui';
 
+import { Link } from 'react-router';
+
 import { full } from './styles/base';
 import Banner from './Banner';
 import LinkButton from './LinkButton';
