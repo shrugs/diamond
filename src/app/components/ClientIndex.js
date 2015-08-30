@@ -70,7 +70,7 @@ class ClientIndex extends React.Component {
 }
 
 ClientIndex.contextTypes = {
-  router: React.PropTypes.func.isRequired,
+  router: React.PropTypes.object.isRequired,
 };
 
 var styles = StyleSheet.create({

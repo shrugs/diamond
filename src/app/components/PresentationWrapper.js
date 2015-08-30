@@ -1,22 +1,22 @@
 'use strict';
 
-import React from 'react';
+import React from 'react/addons';
 var { CSSTransitionGroup } = React.addons;
-
-import { RouteHandler } from 'react-router';
 
 class PresentationWrapper extends React.Component {
   render() {
-    console.log(this.context.router.getCurrentPath());
+    var key = this.props.location.pathname;
+    console.log(key);
     return (
       <CSSTransitionGroup component="div" transitionName="fade" transitionAppear={true}>
-        <RouteHandler key={this.context.router.getCurrentPath()}/>
+        {React.cloneElement(this.props.children || <div/>, { key: key })}
       </CSSTransitionGroup>
     );
   }
 }
-PresentationWrapper.contextTypes = {
-  router: React.PropTypes.func.isRequired,
-};
+
+// PresentationWrapper.contextTypes = {
+//   router: React.PropTypes.func.isRequired,
+// };
 
 export default PresentationWrapper;

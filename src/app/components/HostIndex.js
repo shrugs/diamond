@@ -58,7 +58,7 @@ class HostIndex extends React.Component {
 }
 
 HostIndex.contextTypes = {
-  router: React.PropTypes.func.isRequired,
+  router: React.PropTypes.object.isRequired,
 };
 
 var styles = StyleSheet.create({

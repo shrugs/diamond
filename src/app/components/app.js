@@ -1,6 +1,8 @@
 'use strict';
 
-import React from 'react/addons';
+import React from 'react';
+import { Router, Route } from 'react-router';
+import HashHistory from 'react-router/lib/HashHistory';
 
 import { palette } from './styles/constants';
 
@@ -8,13 +10,6 @@ import mui from 'material-ui';
 var ThemeManager = new mui.Styles.ThemeManager();
 ThemeManager.setTheme(ThemeManager.types.LIGHT);
 ThemeManager.setPalette(palette);
-
-import Router from 'react-router';
-var {
-  Route,
-  RouteHandler,
-  DefaultRoute,
-} = Router;
 
 import ClientIndex from './ClientIndex';
 import PresentationWrapper from './PresentationWrapper';
@@ -25,13 +20,11 @@ import Streaming from './Streaming';
 import { FlatButton } from 'material-ui';
 
 class App extends React.Component {
-
   getChildContext() {
     return {
       muiTheme: ThemeManager.getCurrentTheme(),
     };
   }
-
   render() {
     return (
       <div>
@@ -43,7 +36,7 @@ class App extends React.Component {
             zIndex: '9999',
           }}
           onClick={() => chrome.runtime.reload()} >Reload</FlatButton>
-        <RouteHandler key={window.location}/>
+        {this.props.children}
       </div>
     );
   }
@@ -53,19 +46,19 @@ App.childContextTypes = {
   muiTheme: React.PropTypes.object,
 };
 
-var routes = (
-  <Route handler={App}>
-    <DefaultRoute handler={ClientIndex}/>
-    <Route name="error" path="error/:error" handler={ErrorPage} />
-    <Route path="streaming" handler={Streaming} />
+React.render(
+  <Router history={new HashHistory()}>
+    <Route component={App}>
+      <Route path="/" component={ClientIndex} />
+      <Route path="error" component={ErrorPage} />
+      <Route path="streaming" component={Streaming} />
 
-    <Route name="host" path="host" handler={PresentationWrapper}>
-      <DefaultRoute handler={HostIndex} />
-      <Route name="fuck" path="error" handler={ErrorPage} />
+      <Route path="host" component={PresentationWrapper}>
+        <Route path="/" component={HostIndex} />
+        <Route path="error" component={ErrorPage} />
+      </Route>
     </Route>
-  </Route>
-);
 
-Router.run(routes, Router.HashLocation, (Root) => {
-  React.render(<Root/>, document.getElementById('app'));
-});
+  </Router>,
+  document.getElementById('app')
+);
