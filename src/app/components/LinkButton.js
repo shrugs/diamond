@@ -6,24 +6,31 @@ import { FlatButton } from 'material-ui';
 
 export default class LinkButton extends Link {
   render() {
+
+    var { router } = this.context;
+    var { to, query } = this.props;
+
     var props = assign({}, this.props, {
-      href: this.getHref(),
-      className: this.getClassName(),
-      onClick: this.handleClick.bind(this),
+      href: router.makeHref(to, query),
+      onClick: this.handleClick,
     });
 
-    if (props.activeStyle && this.getActiveState()) {
-      props.style = props.activeStyle;
+    // ignore if rendered outside of the context of a router, simplifies unit testing
+    if (router && router.isActive(to, query)) {
+      if (props.activeClassName)
+        props.className += props.className !== '' ? ` ${props.activeClassName}` : props.activeClassName;
     }
-    props.style = assign({}, props.style, {
-      textAlign: 'center',
+
+    props.style = assign({}, props.style, props.activeStyle || {}, {
       paddingLeft: '10px',
       paddingRight: '10px',
+      textAlign: 'center',
     });
+
 
     return (
       <FlatButton linkButton={true} secondary={true} {...props}>
-        {this.props.children}
+        {props.children}
       </FlatButton>
     );
   }

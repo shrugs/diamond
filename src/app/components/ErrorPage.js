@@ -10,10 +10,10 @@ export default class ErrorPage extends React.Component {
     return (
       <div styles={[full, styles.container]}>
         <div>
-          Hi, this is an error page!
-          {this.props.params.error}
+          <div>Hi, this is an error page!</div>
+          <div>{this.props.location.query.error}</div>
         </div>
-        <LinkButton to={this.props.query.backTo || '/'}>Back</LinkButton>
+        <LinkButton to={this.props.location.state.backTo || '/'}>Back</LinkButton>
       </div>
     );
   }

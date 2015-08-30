@@ -42,4 +42,12 @@ module.exports = {
       'copy': 'file-loader?name=[path][name].[ext]&context=./src',
     },
   },
+  resolve: {
+    alias: {
+      'react': path.join(__dirname, '/node_modules/react'),
+      'react/addons': path.join(__dirname, '/node_modules/react/addons'),
+      // 'material-ui': path.join(__dirname, '/node_modules/material-ui-io'),
+      'material-ui': 'material-ui-io',
+    },
+  },
 };
