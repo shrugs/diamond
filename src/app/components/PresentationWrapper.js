@@ -1,6 +1,6 @@
 'use strict';
 
-import React from 'react';
+import React from 'react/addons';
 var { CSSTransitionGroup } = React.addons;
 
 import { RouteHandler } from 'react-router';
