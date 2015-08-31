@@ -16,7 +16,6 @@ import HostIndex from './HostIndex';
 import ErrorPage from './ErrorPage';
 import Streaming from './Streaming';
 import Presenter from './Presenter';
-import Wrapper from './Wrapper';
 
 import { FlatButton } from 'material-ui';
 

@@ -13,9 +13,8 @@ import StyleSheet from 'react-style';
 import {
   FlatButton,
   TextField,
+  FontIcon,
 } from 'material-ui';
-
-import { Link } from 'react-router';
 
 import { full } from './styles/base';
 import Banner from './Banner';

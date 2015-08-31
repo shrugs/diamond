@@ -3,8 +3,13 @@
 import React from 'react';
 import StyleSheet from 'react-style';
 
-import { FlatButton } from 'material-ui';
+import {
+  FlatButton,
+  FontIcon,
+  Avatar,
+} from 'material-ui';
 import { button } from './styles/base';
+import { palette } from './styles/constants';
 
 export default class ImagePicker extends React.Component {
 
@@ -51,13 +56,32 @@ export default class ImagePicker extends React.Component {
   }
 
   render() {
-    return (
-      <div styles={[styles.container].concat(this.props.styles)}>
-        <FlatButton styles={[button]} onClick={this.chooseImage} primary={true}>
+    var r = [];
+    if (this.props.children) {
+      r.push(
+        <FlatButton key="button" styles={[button]} onClick={this.chooseImage} primary={true}>
           {this.props.children}
         </FlatButton>
-        {/* @TODO(shrugs) - add an "?" icon or whatever inside the empty image */}
-        {this.state.imageURL ? <img src={this.state.imageURL} styles={[styles.img]}></img> : <div styles={[styles.img, styles.empty]}></div>}
+      );
+    }
+
+    if (this.state.imageURL) {
+      r.push(
+        <Avatar key="image" src={this.state.imageURL} styles={[styles.img]} />
+      );
+    } else {
+      r.push(
+        <Avatar
+          key="placeholder"
+          styles={[styles.img, styles.empty]}
+          onClick={this.chooseImage}>
+          <FontIcon className="material-icons" color={palette.accent3Color}>add</FontIcon>
+        </Avatar>
+      );
+    }
+    return (
+      <div styles={[styles.container].concat(this.props.styles)}>
+        {r}
       </div>
     );
   }
@@ -71,12 +95,16 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
   },
   img: {
-    marginLeft: '20px',
+    marginLeft: '10px',
+    marginRight: '10px',
     height: '36px',
     width: '36px',
-    borderRadius: '5px',
   },
   empty: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#EEEEEE',
   },
 });

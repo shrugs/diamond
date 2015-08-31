@@ -29,7 +29,7 @@ module.exports = {
         loaders: ['babel'],
       },
       {
-        test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$/,
+        test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff2?$|\.ttf$/,
         loader: 'copy',
       },
     ],
