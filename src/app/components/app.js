@@ -16,6 +16,7 @@ import HostIndex from './HostIndex';
 import ErrorPage from './ErrorPage';
 import Streaming from './Streaming';
 import Presenter from './Presenter';
+import Wrapper from './Wrapper';
 
 import { FlatButton } from 'material-ui';
 
@@ -50,12 +51,12 @@ React.render(
   <Router history={new HashHistory({queryKey: true})}>
     <Route component={App}>
       <Route path="/" component={ClientIndex} />
-      <Route path="error" component={ErrorPage} />
-      <Route path="streaming" component={Streaming} />
+      <Route path="client/error" component={ErrorPage} />
+      <Route path="client/stream" component={Streaming} />
 
-      <Route path="host" component={HostIndex}>
-        <Route path="present" component={Presenter} />
-      </Route>
+      <Route path="host" component={HostIndex} />
+      <Route path="host/error" component={HostIndex} />
+      <Route path="host/present" component={Presenter} />
 
     </Route>
   </Router>,

@@ -52,8 +52,8 @@ export default class ImagePicker extends React.Component {
 
   render() {
     return (
-      <div styles={[styles.container]}>
-        <FlatButton styles={[button, styles.imageButton]} onClick={this.chooseImage} primary={true}>
+      <div styles={[styles.container].concat(this.props.styles)}>
+        <FlatButton styles={[button]} onClick={this.chooseImage} primary={true}>
           {this.props.children}
         </FlatButton>
         {/* @TODO(shrugs) - add an "?" icon or whatever inside the empty image */}
@@ -69,9 +69,6 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  imageButton: {
-    marginTop: '10px',
   },
   img: {
     marginLeft: '20px',

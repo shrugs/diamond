@@ -85,11 +85,11 @@ class ClientIndex extends React.Component {
           <FlatButton
             style={styles.submit}
             onClick={this.onSubmit}
-            primary={true}
+            secondary={true}
             disabled={!allowConnect}>Connect</FlatButton>
         </div>
         <div styles={[styles.footer]}>
-          <LinkButton to="host">Become a Host</LinkButton>
+          <LinkButton to="host" primary={true}>Become a Host</LinkButton>
         </div>
       </div>
     );

@@ -41,9 +41,7 @@ class HostIndex extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-
-    console.log(this.state);
-    this.context.router.transitionTo('/host/present');
+    this.context.router.transitionTo('host/present');
   }
 
   onImage(img) {
@@ -55,8 +53,9 @@ class HostIndex extends React.Component {
 
   onRoomChange() {
     // validate room name
+    var room = this.refs.room.getValue();
     this.setState({
-      validRoom: true,
+      validRoom: room.length > 1,
       room: this.refs.room.getValue(),
     });
   }
@@ -71,16 +70,16 @@ class HostIndex extends React.Component {
             onChange={this.onRoomChange}
             hintText="my-event"
             floatingLabelText="Room" />
-          <ImagePicker onImage={this.onImage}>Choose a Default Image</ImagePicker>
+          <ImagePicker styles={[styles.picker]} onImage={this.onImage}>Choose a Default Image</ImagePicker>
 
           <FlatButton
             styles={[button, styles.submit]}
             onClick={this.onSubmit}
-            primary={true}
+            secondary={true}
             disabled={!(this.state.validImg && this.state.validRoom)}>Begin Hosting</FlatButton>
         </div>
         <div styles={[styles.footer]}>
-          <LinkButton to="/">Become a Client</LinkButton>
+          <LinkButton to="/" primary={true}>Become a Client</LinkButton>
         </div>
       </div>
     );
@@ -101,6 +100,9 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  picker: {
+    marginTop: '10px',
   },
   submit: {
     marginTop: '30px',
