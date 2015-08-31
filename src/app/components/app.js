@@ -6,7 +6,7 @@ import HashHistory from 'react-router/lib/HashHistory';
 
 import { palette } from './styles/constants';
 
-import mui from 'material-ui';
+import mui, { FlatButton } from 'material-ui';
 var ThemeManager = new mui.Styles.ThemeManager();
 ThemeManager.setTheme(ThemeManager.types.LIGHT);
 ThemeManager.setPalette(palette);
@@ -17,8 +17,6 @@ import ErrorPage from './ErrorPage';
 import Streaming from './Streaming';
 import Presenter from './Presenter';
 
-import { FlatButton } from 'material-ui';
-
 class App extends React.Component {
   getChildContext() {
     return {
@@ -28,14 +26,19 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <FlatButton
+        <div
           style={{
             position: 'absolute',
             top: '0',
             left: '0',
             zIndex: '9999',
-          }}
-          onClick={() => chrome.runtime.reload()}>Reload</FlatButton>
+          }}>
+            <FlatButton
+              style={{
+                float: 'left',
+              }}
+              onClick={() => chrome.runtime.reload()}>Reload</FlatButton>
+          </div>
         {this.props.children}
       </div>
     );

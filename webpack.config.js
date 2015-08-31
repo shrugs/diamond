@@ -32,6 +32,10 @@ module.exports = {
         test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff2?$|\.ttf$/,
         loader: 'copy',
       },
+      {
+        test: require.resolve('react'),
+        loader: 'expose?React',
+      },
     ],
   },
   plugins: [

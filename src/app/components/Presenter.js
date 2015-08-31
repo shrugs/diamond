@@ -21,26 +21,50 @@ import { full, button } from './styles/base';
 import { palette } from './styles/constants';
 
 import LinkButton from './LinkButton';
+import DefaultScreen from './DefaultScreen';
+import ScreenSwitcher from './ScreenSwitcher';
+
+import key from 'keymaster';
+
+const FORWARD_SHORTCUT = 'ctrl+tab';
+const BACKWARD_SHORTCUT = 'shift+ctrl+tab';
+
+const TESTING = true;
 
 export default class Presenter extends React.Component {
 
-  constructor() {
+  constructor(props) {
     super();
 
     this.fullscreen = this.fullscreen.bind(this);
     this.updateDimensions = this.updateDimensions.bind(this);
+    this.incrementFocusedScreen = this.incrementFocusedScreen.bind(this);
+    this.decrementFocusedScreen = this.decrementFocusedScreen.bind(this);
+    this.resetTimer = this.resetTimer.bind(this);
+    this.windowFocused = this.windowFocused.bind(this);
 
     this.state = {
       width: window.innerWidth,
       height: window.innerHeight,
       hasFullscreenedOnce: false,
-    }
+      focusedScreen: 0,
+      tempFocusedScreen: 0,
+      screens: [
+        (<DefaultScreen key="default" src={props.location.query.defaultScreen} />),
+        (<DefaultScreen key="default2" src={props.location.query.defaultScreen} />),
+      ],
+    };
+
   }
 
   componentDidMount() {
+    key(FORWARD_SHORTCUT, this.incrementFocusedScreen);
+    key(BACKWARD_SHORTCUT, this.decrementFocusedScreen);
     window.addEventListener('webkitfullscreenchange', this.updateDimensions);
   }
   componentWillUnmount() {
+    key.unbind(FORWARD_SHORTCUT);
+    key.unbind(BACKWARD_SHORTCUT);
     window.removeEventListener('webkitfullscreenchange', this.updateDimensions);
   }
 
@@ -56,16 +80,45 @@ export default class Presenter extends React.Component {
     this.setState({hasFullscreenedOnce: true});
   }
 
+  resetTimer() {
+    this.setState({timer: window.setTimeout(this.windowFocused, 3000)});
+  }
+
+  windowFocused() {
+    // hide screenswitcher ui
+    // change focusedScreen state var
+    this.setState({
+      timer: undefined,
+      focusedScreen: this.state.tempFocusedScreen,
+    });
+  }
+
+  incrementFocusedScreen() {
+    var i = this.state.timer !== undefined ? this.state.tempFocusedScreen : 0 ;
+    i = (i + 1) % this.state.screens.length;
+    this.setState({
+      tempFocusedScreen: i,
+    });
+    this.resetTimer();
+  }
+
+  decrementFocusedScreen() {
+    var i = this.state.time !== undefined ? this.state.tempFocusedScreen : this.state.screens.length;
+    i = (i - 1) % this.state.screens.length;
+    this.setState({
+      tempFocusedScreen: i,
+    });
+    this.resetTimer();
+  }
+
   render() {
     var r = [];
-    if (document.webkitIsFullScreen) {
+    if (document.webkitIsFullScreen || TESTING) {
       r.push(
         <div key="presenter">
-          {/* PUT OVERLAY THING HERE */}
-          <CSSTransitionGroup component="div" transitionName="fade">
-            <div key="test">
-              YO YO YO
-            </div>
+          {this.state.timer !== undefined ? <ScreenSwitcher screens={this.state.screens} focusedScreen={this.state.tempFocusedScreen} /> : null}
+          <CSSTransitionGroup id="test" component="div" transitionName="fade" style={styles.presentationContainer}>
+            {this.state.screens[this.state.focusedScreen]}
           </CSSTransitionGroup>
         </div>
       );
@@ -125,5 +178,11 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: palette.accent2Color,
+  },
+  presentationContainer: {
+    position: 'relative',
+    width: '100vw',
+    height: '100vh',
   },
 });

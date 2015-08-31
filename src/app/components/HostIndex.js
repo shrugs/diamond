@@ -41,7 +41,7 @@ class HostIndex extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    this.context.router.transitionTo('host/present');
+    this.context.router.transitionTo('host/present', {defaultScreen: this.state.img});
   }
 
   onImage(img) {
