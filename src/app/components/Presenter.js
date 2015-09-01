@@ -117,7 +117,7 @@ export default class Presenter extends React.Component {
       r.push(
         <div key="presenter">
           {this.state.timer !== undefined ? <ScreenSwitcher screens={this.state.screens} focusedScreen={this.state.tempFocusedScreen} /> : null}
-          <CSSTransitionGroup id="test" component="div" transitionName="fade" style={styles.presentationContainer}>
+          <CSSTransitionGroup component="div" transitionName="fade" style={styles.presentationContainer}>
             {this.state.screens[this.state.focusedScreen]}
           </CSSTransitionGroup>
         </div>
@@ -154,11 +154,20 @@ export default class Presenter extends React.Component {
 
     return (
       <div styles={[full, styles.container]}>
+        <div style={{
+          position: 'absolute',
+          background: 'url(' + this.props.location.query.defaultScreen + ') no-repeat',
+          backgroundSize: 'cover',
+          WebkitFilter: 'blur(30px)',
+          width: '100%',
+          height: '100%',
+        }}></div>
         {r}
       </div>
     );
   }
 }
+
 
 var styles = StyleSheet.create({
   title: {
@@ -178,7 +187,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: palette.accent2Color,
+    backgroundColor: '#424242',
   },
   presentationContainer: {
     position: 'relative',
