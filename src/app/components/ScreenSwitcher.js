@@ -10,8 +10,25 @@ export default class ScreenSwitcher extends React.Component {
   }
 
   render() {
+
+    var screens = this.props.screens.map((s, i) => {
+      var metadata = s.metadata();
+
+      return (
+        <div key={i}>
+          <canvas ref={(c) => {
+            console.log(this, c);
+          }}></canvas>
+          <h4>{metadata.title}</h4>
+          <p>{metadata.tagline}</p>
+        </div>
+      );
+    });
+
     return (
-      <div>SCREEN PICKER YAY {this.props.focusedScreen}</div>
+      <div styles={[this.props.styles]}>
+        {screens}
+      </div>
     );
   }
 }

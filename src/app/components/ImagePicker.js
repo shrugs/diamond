@@ -7,6 +7,7 @@ import {
   FlatButton,
   FontIcon,
   Avatar,
+  CircularProgress,
 } from 'material-ui';
 import { button } from './styles/base';
 import { palette } from './styles/constants';
@@ -22,7 +23,7 @@ export default class ImagePicker extends React.Component {
 
     this.getImage = this.getImage.bind(this);
     this.chooseImage = this.chooseImage.bind(this);
-    this.state = {imageURL: undefined};
+    this.state = {imageURL: undefined, loading: false};
   }
 
   getImage() {
@@ -43,10 +44,12 @@ export default class ImagePicker extends React.Component {
         }
         return;
       }
+      this.setState({loading: true});
       img.file((file) => {
         var url = window.URL.createObjectURL(file);
         this.setState({
           imageURL: url,
+          loading: false,
         });
         if (this.props.onImage) {
           this.props.onImage(url);
@@ -75,7 +78,11 @@ export default class ImagePicker extends React.Component {
           key="placeholder"
           styles={[styles.img, styles.empty]}
           onClick={this.chooseImage}>
-          <FontIcon className="material-icons" color={palette.accent3Color}>add</FontIcon>
+          {
+            this.state.loading ?
+            <CircularProgress innerStyle={{margin: '0'}} mode="indeterminate" size={0.5} /> :
+            <FontIcon className="material-icons" color={palette.accent3Color}>add</FontIcon>
+          }
         </Avatar>
       );
     }

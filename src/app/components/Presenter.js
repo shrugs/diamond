@@ -81,7 +81,7 @@ export default class Presenter extends React.Component {
   }
 
   resetTimer() {
-    this.setState({timer: window.setTimeout(this.windowFocused, 3000)});
+    this.setState({timer: window.setTimeout(this.windowFocused, 300000)});
   }
 
   windowFocused() {
@@ -103,7 +103,7 @@ export default class Presenter extends React.Component {
   }
 
   decrementFocusedScreen() {
-    var i = this.state.time !== undefined ? this.state.tempFocusedScreen : this.state.screens.length;
+    var i = this.state.timer !== undefined ? this.state.tempFocusedScreen : this.state.screens.length;
     i = (i - 1) % this.state.screens.length;
     this.setState({
       tempFocusedScreen: i,
@@ -115,8 +115,8 @@ export default class Presenter extends React.Component {
     var r = [];
     if (document.webkitIsFullScreen || TESTING) {
       r.push(
-        <div key="presenter">
-          {this.state.timer !== undefined ? <ScreenSwitcher screens={this.state.screens} focusedScreen={this.state.tempFocusedScreen} /> : null}
+        <div key="presenter" styles={[styles.presenter]}>
+          {this.state.timer !== undefined ? <ScreenSwitcher styles={[full, styles.switcher]} screens={this.state.screens} focusedScreen={this.state.tempFocusedScreen} /> : null}
           <CSSTransitionGroup component="div" transitionName="fade" style={styles.presentationContainer}>
             {this.state.screens[this.state.focusedScreen]}
           </CSSTransitionGroup>
@@ -193,5 +193,15 @@ var styles = StyleSheet.create({
     position: 'relative',
     width: '100vw',
     height: '100vh',
+  },
+  presenter: {
+
+  },
+  switcher: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: '1',
   },
 });
