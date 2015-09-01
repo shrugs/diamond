@@ -80,10 +80,4 @@ var styles = StyleSheet.create({
     transition: 'width .5s ease-in-out, box-shadow .2s ease-in-out',
     height: '80%',
   },
-  title: {
-    fontFamily: 'Roboto, sans-serif',
-  },
-  tagline: {
-    color: palette.accent2Color,
-  },
 });
