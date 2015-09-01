@@ -47,7 +47,7 @@ class ClientIndex extends React.Component {
     //   tagline: this.refs.tagline.getValue(),
     // };
     // console.log(metadata);
-    this.context.router.transitionTo('error', {error: 'lsjfadsfjsf'}, {backTo: '/'});
+    this.context.router.transitionTo('client/error', {error: 'lsjfadsfjsf'}, {backTo: '/'});
   }
 
   syncToState(k) {

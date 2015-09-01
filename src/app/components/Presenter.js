@@ -30,6 +30,7 @@ const FORWARD_SHORTCUT = 'ctrl+tab';
 const BACKWARD_SHORTCUT = 'shift+ctrl+tab';
 
 const TESTING = true;
+const TIMER_DELAY = 600;
 
 export default class Presenter extends React.Component {
 
@@ -81,15 +82,20 @@ export default class Presenter extends React.Component {
   }
 
   resetTimer() {
-    this.setState({timer: window.setTimeout(this.windowFocused, 300000)});
+    window.clearTimeout(this.state.timer);
+    this.setState({timer: window.setTimeout(this.windowFocused, TIMER_DELAY)});
   }
 
   windowFocused() {
     // hide screenswitcher ui
     // change focusedScreen state var
+    var screens = this.state.screens;
+    var tScreen = screens.splice(this.state.tempFocusedScreen, 1)[0];
+    screens.unshift(tScreen);
     this.setState({
       timer: undefined,
-      focusedScreen: this.state.tempFocusedScreen,
+      focusedScreen: 0,
+      screens: screens,
     });
   }
 
@@ -104,7 +110,10 @@ export default class Presenter extends React.Component {
 
   decrementFocusedScreen() {
     var i = this.state.timer !== undefined ? this.state.tempFocusedScreen : this.state.screens.length;
-    i = (i - 1) % this.state.screens.length;
+    i = (i - 1);
+    if (i < 0) {
+      i = this.state.screens.length - 1;
+    }
     this.setState({
       tempFocusedScreen: i,
     });
@@ -115,8 +124,10 @@ export default class Presenter extends React.Component {
     var r = [];
     if (document.webkitIsFullScreen || TESTING) {
       r.push(
-        <div key="presenter" styles={[styles.presenter]}>
-          {this.state.timer !== undefined ? <ScreenSwitcher styles={[full, styles.switcher]} screens={this.state.screens} focusedScreen={this.state.tempFocusedScreen} /> : null}
+        <div key="presenter">
+          <div styles={[styles.presenter]}>
+            {this.state.timer !== undefined ? <ScreenSwitcher styles={[full, styles.switcher]} screens={this.state.screens} focusedScreen={this.state.tempFocusedScreen} /> : null}
+          </div>
           <CSSTransitionGroup component="div" transitionName="fade" style={styles.presentationContainer}>
             {this.state.screens[this.state.focusedScreen]}
           </CSSTransitionGroup>
@@ -195,13 +206,18 @@ var styles = StyleSheet.create({
     height: '100vh',
   },
   presenter: {
-
-  },
-  switcher: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+
+    position: 'absolute',
+    height: '100vh',
+    width: '100vw',
+  },
+  switcher: {
     zIndex: '1',
+    height: '30vh',
+    position: 'relative',
   },
 });

@@ -31,6 +31,7 @@ export default class ImagePicker extends React.Component {
   }
 
   chooseImage() {
+    this.setState({loading: true});
     chrome.fileSystem.chooseEntry({
       accepts:[
         {
@@ -42,9 +43,11 @@ export default class ImagePicker extends React.Component {
         if (this.props.onImage) {
           this.props.onImage(img);
         }
+        this.setState({
+          imageURL: undefined,
+        });
         return;
       }
-      this.setState({loading: true});
       img.file((file) => {
         var url = window.URL.createObjectURL(file);
         this.setState({

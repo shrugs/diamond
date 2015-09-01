@@ -10,6 +10,8 @@ export default class DefaultScreen extends React.Component {
     super();
 
     this.screenshot = this.screenshot.bind(this);
+    this.metadata = this.metadata.bind(this);
+    this.content = this.content.bind(this);
   }
 
   metadata() {
@@ -17,6 +19,19 @@ export default class DefaultScreen extends React.Component {
       title: 'Default Screen',
       tagline: 'I\'m the default. _Nice_. ',
     };
+  }
+
+  content() {
+    /*
+      {return} the content of this screen
+    */
+
+    return (<div style={{
+      background: 'url(' + this.props.src + ') no-repeat',
+      backgroundSize: 'cover',
+      width: '100%',
+      height: '100%',
+    }} />);
   }
 
   screenshot(ctx) {

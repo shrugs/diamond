@@ -1,7 +1,5 @@
 'use strict';
 
-export var highlightColor = '#29afff';
-
 export var palette = {
   primary1Color: '#29afff',
   primary2Color: '#2196F3',

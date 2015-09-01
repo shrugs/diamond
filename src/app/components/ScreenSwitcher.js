@@ -3,30 +3,59 @@
 import React from 'react';
 import StyleSheet from 'react-style';
 
+import { palette } from './styles/constants';
+import { Paper } from 'material-ui';
+
+const MARGINS = 20;
+const MAX_SCREEN_WIDTH = 30;
+
 export default class ScreenSwitcher extends React.Component {
   propTypes: {
-    screens: React.PropTypes.array, // array of Screen Types that support .screenshot() & .metadata()
+    screens: React.PropTypes.array, // array of Screen Types that supports .content()
     focusedScreen: React.PropTypes.number, // index of focused screen, must be in bounds
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.getScreenPreviewContent = this.getScreenPreviewContent.bind(this);
+
+    this.state = {content: this.getScreenPreviewContent()};
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.screens !== nextProps.screens) {
+      this.setState({
+        content: this.getScreenPreviewContent(),
+      });
+    }
+  }
+
+  getScreenPreviewContent() {
+    return this.props.screens.map((s) => {
+      var screen = React.render(s, document.getElementById('hidden'));
+      return screen.content();
+    });
   }
 
   render() {
 
-    var screens = this.props.screens.map((s, i) => {
-      var metadata = s.metadata();
+    var width = Math.min((100-MARGINS)/this.props.screens.length, MAX_SCREEN_WIDTH) + '%';
 
+    var screens = this.props.screens.map((s, i) => {
       return (
-        <div key={i}>
-          <canvas ref={(c) => {
-            console.log(this, c);
-          }}></canvas>
-          <h4>{metadata.title}</h4>
-          <p>{metadata.tagline}</p>
-        </div>
+        <Paper
+          key={i}
+          zDepth={this.props.focusedScreen === i ? 5 : 1}
+          styles={[styles.screen, {width: width}]}>
+
+          {this.state.content[i]}
+        </Paper>
       );
     });
 
     return (
-      <div styles={[this.props.styles]}>
+      <div styles={[this.props.styles, styles.container]}>
         {screens}
       </div>
     );
@@ -34,5 +63,27 @@ export default class ScreenSwitcher extends React.Component {
 }
 
 var styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'rgba(207, 216, 220, 0.7)',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  screen: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
 
+    transition: 'width .5s ease-in-out, box-shadow .2s ease-in-out',
+    height: '80%',
+  },
+  title: {
+    fontFamily: 'Roboto, sans-serif',
+  },
+  tagline: {
+    color: palette.accent2Color,
+  },
 });
