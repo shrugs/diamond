@@ -24,13 +24,15 @@ import LinkButton from './LinkButton';
 import DefaultScreen from './DefaultScreen';
 import ScreenSwitcher from './ScreenSwitcher';
 
+import Peer from 'peerjs';
+
 import key from 'keymaster';
 
 const FORWARD_SHORTCUT = 'ctrl+tab';
 const BACKWARD_SHORTCUT = 'shift+ctrl+tab';
 
 const TESTING = true;
-const TIMER_DELAY = 600;
+const TIMER_DELAY = 6000;
 
 export default class Presenter extends React.Component {
 
@@ -43,6 +45,7 @@ export default class Presenter extends React.Component {
     this.decrementFocusedScreen = this.decrementFocusedScreen.bind(this);
     this.resetTimer = this.resetTimer.bind(this);
     this.windowFocused = this.windowFocused.bind(this);
+    this.onCall = this.onCall.bind(this);
 
     this.state = {
       width: window.innerWidth,
@@ -55,19 +58,49 @@ export default class Presenter extends React.Component {
         (<DefaultScreen key="default2" src={props.location.query.defaultScreen} />),
       ],
     };
-
   }
 
   componentDidMount() {
     key(FORWARD_SHORTCUT, this.incrementFocusedScreen);
     key(BACKWARD_SHORTCUT, this.decrementFocusedScreen);
     window.addEventListener('webkitfullscreenchange', this.updateDimensions);
+
+    // INIT PEERJS
+    var peer = new Peer(this.props.location.query.room, {key: 'qfsyx0jzn7xbhuxr'});
+    peer.on('call', this.onCall);
   }
   componentWillUnmount() {
     key.unbind(FORWARD_SHORTCUT);
     key.unbind(BACKWARD_SHORTCUT);
     window.removeEventListener('webkitfullscreenchange', this.updateDimensions);
+
+    // DESTROY PEERJS
+    // @TODO(shrugs) message all of the peers that the host will now shut down
+    // call .close() on all connections
   }
+
+  /**
+    BEGIN PEERJS LOGIC BLOCK
+  **/
+
+  onCall(call) {
+    call.answer();
+    call.on('stream', (remoteStream) => {
+      // got a new remoteStream ; save to store and setState with a new Screen
+      var url = window.URL.createObjectURL(remoteStream);
+      this.state.screens.push(
+        <Screen key={url} src={url} metadata={call.metadata} />
+      );
+      this.setState({
+        screens: this.state.screens,
+        focusedScreen: this.state.screens.length,
+      });
+    });
+  }
+
+  /**
+    END PEERJS LOGIC BLOCK
+  **/
 
   updateDimensions() {
     this.setState({

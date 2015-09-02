@@ -13,12 +13,12 @@ import StyleSheet from 'react-style';
 import {
   FlatButton,
   TextField,
-  FontIcon,
 } from 'material-ui';
 
 import { full } from './styles/base';
 import Banner from './Banner';
 import LinkButton from './LinkButton';
+import StreamPicker from './StreamPicker';
 
 
 class ClientIndex extends React.Component {
@@ -32,6 +32,7 @@ class ClientIndex extends React.Component {
       room: '',
       title: '',
       tagline: '',
+      stream: undefined,
     };
   }
 
@@ -41,13 +42,7 @@ class ClientIndex extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    // var metadata = {
-    //   room: this.refs.room.getValue(),
-    //   title: this.refs.title.getValue(),
-    //   tagline: this.refs.tagline.getValue(),
-    // };
-    // console.log(metadata);
-    this.context.router.transitionTo('client/error', {error: 'lsjfadsfjsf'}, {backTo: '/'});
+    this.context.router.transitionTo('client/stream', this.state, {stream: this.state.stream});
   }
 
   syncToState(k) {
@@ -61,7 +56,8 @@ class ClientIndex extends React.Component {
   render() {
     var allowConnect = this.state.room.length > 0 &&
                        this.state.title.length > 0 &&
-                       this.state.tagline.length > 0;
+                       this.state.tagline.length > 0 &&
+                       this.state.stream !== undefined;
     return(
       <div styles={[full]}>
         <Banner styles={[styles.banner]} />
@@ -81,6 +77,9 @@ class ClientIndex extends React.Component {
             onChange={this.syncToState('tagline')}
             hintText="A quick summary..."
             floatingLabelText="Tagline" />
+          <StreamPicker styles={[styles.streamPicker]} onStream={(s) => { this.setState({stream: s}); }}>
+            Choose a Screen
+          </StreamPicker>
           <FlatButton
             style={styles.submit}
             onClick={this.onSubmit}
@@ -112,6 +111,9 @@ var styles = StyleSheet.create({
   },
   submit: {
     marginTop: '20px',
+  },
+  streamPicker: {
+    marginTop: '10px',
   },
   footer: {
     height: '10vh',

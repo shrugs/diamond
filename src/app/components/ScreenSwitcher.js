@@ -3,7 +3,6 @@
 import React from 'react';
 import StyleSheet from 'react-style';
 
-import { palette } from './styles/constants';
 import { Paper } from 'material-ui';
 
 const MARGINS = 20;
@@ -32,9 +31,13 @@ export default class ScreenSwitcher extends React.Component {
   }
 
   getScreenPreviewContent() {
-    return this.props.screens.map((s) => {
-      var screen = React.render(s, document.getElementById('hidden'));
-      return screen.content();
+    // return this.props.screens.map((s) => {
+    //   var screen = React.render(s, document.getElementById('hidden'));
+    //   return screen.content();
+    // });
+
+    return this.props.screens.map(() => {
+      return (<div></div>);
     });
   }
 
