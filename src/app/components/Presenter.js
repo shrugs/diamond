@@ -25,6 +25,8 @@ import Screen from './Screen';
 import DefaultScreen from './DefaultScreen';
 import ScreenSwitcher from './ScreenSwitcher';
 
+import _ from 'lodash';
+
 import Peer from 'peerjs';
 
 import key from 'keymaster';
@@ -33,7 +35,7 @@ const FORWARD_SHORTCUT = 'ctrl+tab';
 const BACKWARD_SHORTCUT = 'shift+ctrl+tab';
 
 const TESTING = true;
-const TIMER_DELAY = 6000;
+const TIMER_DELAY = 800;
 
 export default class Presenter extends React.Component {
 
@@ -93,8 +95,11 @@ export default class Presenter extends React.Component {
       );
       this.setState({
         screens: this.state.screens,
-        focusedScreen: this.state.screens.length,
       });
+    });
+    call.on('close', () => {
+      // @TODO(shrugs) - remove the call from the array when it ends
+      // and make sure to handle focusedScreen
     });
   }
 

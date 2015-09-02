@@ -1,10 +1,10 @@
 {
     "appName": {
-        "message": "Diamond - Presentations that Don't Suck",
+        "message": "Diamond",
         "description": "The name of the application"
     },
     "appDescription": {
-        "message": "Video multiplexer for presentations.",
+        "message": "A foundation for pitches: video multiplexer.",
         "description": "The description of the application"
     },
     "shortName": {
