@@ -21,6 +21,7 @@ import { full, button } from './styles/base';
 import { palette } from './styles/constants';
 
 import LinkButton from './LinkButton';
+import Screen from './Screen';
 import DefaultScreen from './DefaultScreen';
 import ScreenSwitcher from './ScreenSwitcher';
 
@@ -55,7 +56,6 @@ export default class Presenter extends React.Component {
       tempFocusedScreen: 0,
       screens: [
         (<DefaultScreen key="default" src={props.location.query.defaultScreen} />),
-        (<DefaultScreen key="default2" src={props.location.query.defaultScreen} />),
       ],
     };
   }
