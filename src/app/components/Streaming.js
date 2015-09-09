@@ -26,6 +26,11 @@ export default class Streaming extends React.Component {
     var { stream } = this.props.location.state;
 
     var peer = new Peer({key: 'qfsyx0jzn7xbhuxr'});
+    peer.on('error', (err) => {
+      peer.destroy();
+      this.error(err);
+    });
+
     var call = peer.call(room, stream, {metadata: {title: title, tagline: tagline}});
     call.on('close', () => {
       // CONNECTION CLOSED
@@ -33,6 +38,7 @@ export default class Streaming extends React.Component {
         call: undefined,
       });
       // @TODO(shrugs) trigger steaming ending here
+      peer.destroy();
       this.disconnect();
     });
     call.on('error', this.error);
@@ -47,7 +53,11 @@ export default class Streaming extends React.Component {
       }
     }, 300);
 
-    stream.onended = this.disconnect;
+    stream.onended = () => {
+      console.log('STREAM ENDED');
+      peer.destroy();
+      this.disconnect();
+    };
 
     this.setState({
       call: call,
@@ -62,18 +72,18 @@ export default class Streaming extends React.Component {
       this.state.call.close();
     }
 
-    if (this.state.stream) {
+    if (this.state.stream && this.state.stream.stop) {
       this.state.stream.stop();
     }
   }
 
   disconnect() {
-    this.context.router.transitionTo('client/error', {error: 'this isn\'t actually an error'});
+    this.context.router.transitionTo('client/error', {error: 'Should show some "done streaming" page here'});
   }
 
   error(err) {
     console.log(err);
-    // this.context.router.transitionTo('client/error', {error: err.type}, {backTo: '/'});
+    this.context.router.transitionTo('client/error', {error: err}, {backTo: '/'});
   }
 
   render() {

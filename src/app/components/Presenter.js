@@ -57,7 +57,10 @@ export default class Presenter extends React.Component {
       focusedScreen: 0,
       tempFocusedScreen: 0,
       screens: [
-        (<DefaultScreen key="default" src={props.location.query.defaultScreen} />),
+        {
+          call: {close: () => {}}, // noop
+          screen: <DefaultScreen key="default" src={props.location.query.defaultScreen} />,
+        },
       ],
     };
   }
@@ -69,7 +72,15 @@ export default class Presenter extends React.Component {
 
     // INIT PEERJS
     var peer = new Peer(this.props.location.query.room, {key: 'qfsyx0jzn7xbhuxr'});
+    peer.on('error', (err) => {
+      console.log(err);
+      this.context.router.transitionTo('host/error', {error: err}, {backTo: '/'});
+    });
     peer.on('call', this.onCall);
+
+    this.setState({
+      peer: peer,
+    });
   }
   componentWillUnmount() {
     key.unbind(FORWARD_SHORTCUT);
@@ -79,6 +90,9 @@ export default class Presenter extends React.Component {
     // DESTROY PEERJS
     // @TODO(shrugs) message all of the peers that the host will now shut down
     // call .close() on all connections
+    if (this.state.peer) {
+      this.state.peer.destroy();
+    }
   }
 
   /**
@@ -91,7 +105,10 @@ export default class Presenter extends React.Component {
       // got a new remoteStream ; save to store and setState with a new Screen
       var url = window.URL.createObjectURL(remoteStream);
       this.state.screens.push(
-        <Screen key={url} src={url} metadata={call.metadata} />
+        {
+          call: call,
+          screen: <Screen key={url} src={url} metadata={call.metadata} />,
+        }
       );
       this.setState({
         screens: this.state.screens,
@@ -100,6 +117,12 @@ export default class Presenter extends React.Component {
     call.on('close', () => {
       // @TODO(shrugs) - remove the call from the array when it ends
       // and make sure to handle focusedScreen
+      var screenToRemove = _.findIndex(this.state.screens, {call: call});
+      this.state.screens.splice(screenToRemove, 1);
+      this.setState({
+        screens: this.state.screens,
+        focusedScreen: 0,
+      });
     });
   }
 
@@ -164,10 +187,10 @@ export default class Presenter extends React.Component {
       r.push(
         <div key="presenter">
           <div styles={[styles.presenter]}>
-            {this.state.timer !== undefined ? <ScreenSwitcher styles={[full, styles.switcher]} screens={this.state.screens} focusedScreen={this.state.tempFocusedScreen} /> : null}
+            {this.state.timer !== undefined ? <ScreenSwitcher styles={[full, styles.switcher]} screens={this.state.screens.map((s) => s.screen)} focusedScreen={this.state.tempFocusedScreen} /> : null}
           </div>
           <CSSTransitionGroup component="div" transitionName="fade" style={styles.presentationContainer}>
-            {this.state.screens[this.state.focusedScreen]}
+            {this.state.screens[this.state.focusedScreen].screen}
           </CSSTransitionGroup>
         </div>
       );
@@ -216,6 +239,10 @@ export default class Presenter extends React.Component {
     );
   }
 }
+
+Presenter.contextTypes = {
+  router: React.PropTypes.object,
+};
 
 
 var styles = StyleSheet.create({
