@@ -16,6 +16,7 @@ import HostIndex from './HostIndex';
 import ErrorPage from './ErrorPage';
 import Streaming from './Streaming';
 import Presenter from './Presenter';
+import DonePage from './DonePage';
 
 class App extends React.Component {
   getChildContext() {
@@ -55,6 +56,7 @@ React.render(
       <Route path="/" component={ClientIndex} />
       <Route path="client/error" component={ErrorPage} />
       <Route path="client/stream" component={Streaming} />
+      <Route path="client/done" component={DonePage} />
 
       <Route path="host" component={HostIndex} />
       <Route path="host/error" component={HostIndex} />

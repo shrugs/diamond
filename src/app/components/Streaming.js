@@ -3,7 +3,7 @@
 import React from 'react';
 import StyleSheet from 'react-style';
 
-import { full } from './styles/base';
+import { full, button } from './styles/base';
 
 import { FlatButton, CircularProgress } from 'material-ui';
 
@@ -78,7 +78,7 @@ export default class Streaming extends React.Component {
   }
 
   disconnect() {
-    this.context.router.transitionTo('client/error', {error: 'Should show some "done streaming" page here'});
+    this.context.router.transitionTo('client/done');
   }
 
   error(err) {
@@ -94,12 +94,12 @@ export default class Streaming extends React.Component {
           this.state.loading ?
           <CircularProgress innerStyle={{margin: 0}} mode="indeterminate"/> :
           <div>
-            <h1 styles={[styles.title]}>You're Connected</h1>
-            <p> to {this.props.location.query.room}</p>
+            <h1 styles={[styles.title]}>You're Connected to</h1>
+            <h2>{this.props.location.query.room}</h2>
           </div>
         }
 
-        <FlatButton styles={[styles.button]} onClick={this.disconnect}>{this.state.loading ? 'Cancel' : 'Disconnect'}</FlatButton>
+        <FlatButton styles={[button, styles.button]} onClick={this.disconnect}>{this.state.loading ? 'Cancel' : 'Disconnect'}</FlatButton>
 
       </div>
     );
@@ -116,6 +116,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    textAlign: 'center',
   },
   button: {
     marginTop: '20px',

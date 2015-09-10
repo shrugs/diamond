@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { full } from './styles/base';
+import { full, button } from './styles/base';
 import StyleSheet from 'react-style';
 import LinkButton from './LinkButton';
 
@@ -13,7 +13,7 @@ export default class ErrorPage extends React.Component {
           <div>Hi, this is an error page!</div>
           <div>{this.props.location.query.error}</div>
         </div>
-        <LinkButton to={this.props.location.state.backTo || '/'}>Back</LinkButton>
+        <LinkButton styles={[button, styles.button]} to={this.props.location.state.backTo || '/'}>Back</LinkButton>
       </div>
     );
   }
@@ -25,5 +25,8 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  button: {
+    marginTop: '20px',
   },
 });
